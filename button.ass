@@ -1,0 +1,97 @@
+/*
+*MC button interface
+*/
+
+var buttoncanvas=$.createCanvas({lifeTime:0,parent:canvas});
+
+function createMCButton(_x,_y,_width,_height,_text,_onclick,_canvas){
+    var _bmd=Bitmap.createBitmapData(_width,_height,false,0xff6f6f6f);
+    var _rect1=Bitmap.createRectangle(0,0,_width,2);
+    _bmd.fillRect(_rect1,0xff000000);
+    var _rect2=Bitmap.createRectangle(0,0,2,_height);
+    _bmd.fillRect(_rect2,0xff000000);
+    var _rect3=Bitmap.createRectangle(0,_height-2,_width,2);
+    _bmd.fillRect(_rect3,0xff000000);
+    var _rect4=Bitmap.createRectangle(_width-2,0,2,$.height);
+    _bmd.fillRect(_rect4,0xff000000);
+    var _rect5=Bitmap.createRectangle(2,2,_width-2-2,2);
+    _bmd.fillRect(_rect5,0xffaaaaaa);
+    var _rect6=Bitmap.createRectangle(2,2,2,_height-2-4);
+    _bmd.fillRect(_rect6,0xffaaaaaa);
+    var _rect7=Bitmap.createRectangle(2,_height-6,_width-6,4);
+    _bmd.fillRect(_rect7,0x565656);
+    var _rect8=Bitmap.createRectangle(_width-4,4,2,_height-6);
+    _bmd.fillRect(_rect8,0x565656);
+    var _rect9=Bitmap.createRectangle(2,_height-6,2,4);
+    _bmd.fillRect(_rect9,0x6d6d6d);
+    var _rect10=Bitmap.createRectangle(_width-4,2,2,2);
+    _bmd.fillRect(_rect10,0x6d6d6d);
+    var _bitmap=Bitmap.createBitmap({bitmapData:_bmd});
+    _bitmap.setParent(_canvas);
+    _bitmap.x=_x;
+    _bitmap.y=_y;
+    var _textFShadow=$.createComment(_text,{lifeTime:0,font:"system",color:0x000000,parent:_canvas});
+    _textFShadow.transform.matrix3D=null;
+    _textFShadow.filters=null;
+    _textFShadow.x=_x+_width/2-_textFShadow.textWidth/2;
+    _textFShadow.y=_y+_height/2-_textFShadow.textHeight/2;
+    var _textF=$.createComment(_text,{lifeTime:0,font:"system",color:0xffffff,parent:_canvas});
+    _textF.transform.matrix3D=null;
+    _textF.filters=null;
+    _textF.x=_x+_width/2-_textF.textWidth/2-2;
+    _textF.y=_y+_height/2-_textF.textHeight/2-2;
+    var _buttonF=$.createButton({lifeTime:0,width:_width,height:_height,alpha:0.0,onclick:function(){_onclick(_textF);},text:"",parent:_canvas});
+    _buttonF.transform.matrix3D=null;
+    _buttonF.x=_x;
+    _buttonF.y=_y;
+}
+
+function startUI(){
+    while(maincanvas.numChildren>0){
+        maincanvas.removeChildAt(0);
+    }
+    log("加载开始界面中");
+    var _bgarray=$G._get("bg1");var _bgdata=Bitmap.createBitmapData(256,256,false,0xfafafa);
+    for(var index1=0;index1!=256;++index1){
+        for(var index2=0;index2!=256;++index2){
+            _bgdata.setPixal(index1,index2,_bgarray[index1*256+index2]);
+        }
+    }
+    var _bgbmp=Bitmap.createBitmap({bitmapData:_bgdata,smoothing:true,scale:10.0,lifeTime:0});
+    _bgbmp.setParent(maincanvas);
+    _bgbmp.x=-400;
+    _bgbmp.y=-400;
+    /*var _filters=$.createBlurFilter(128.0,128.0,3);
+    _bgbmp.filters=_fileters;*/
+    var _title=Bitmap.createBitmap({bitmapData:$G._get("minecraft_logo"),smoothing:false,lifeTime:0});
+    _title.setParent(maincanvas);
+    _title.transform.matrix3D=null;
+    _title.x=$.width/2-288/2;
+    _title.y=60;
+    createMCButton($.width/2-200,$.height/2-20-16-40,400,40,"单人游戏",gamestart,maincanvas);
+    createMCButton($.width/2-200,$.height/2-20,400,40,"多人游戏",function(){},maincanvas);
+    createMCButton($.width/2-200,$.height/2+20+16,400,40,"选项",option,maincanvas);
+    log("开始界面加载完成");
+    Player.pause();
+}
+
+function option(){
+    maincanvas.visible=false;
+    optioncanvas.visible=false;
+    optioncanvas=$.createCanvas({lifeTime:0,parent:startcanvas});
+    optioncanvas.transform.matrix3D=null;
+    var _bgdata=$._get();
+    createMCButton($.width/2-200,$.height/2-8-40,400,40,"视野 : "+seerange[see_point],function(comment){
+                    see_point++;
+                    if(see_point>=seerange.length)see_point=8;
+                    comment.text="视野 : "+seerange[see_point];
+    },optioncanvas);
+    createMCButton($.width/2-200,$.height/2+8,400,40,"左下提醒 :"+(log_can?"是":"否"),function(comment){
+                    log_can=!logcan;
+                    comment.text="左下提醒 :"+(log_can?"是":"否");
+    },optioncanvas);
+    createMCButton($.width/2-200,$.height/2+8+80,400,40,"返回",function(){
+                    optioncanvas.visible=false;
+                    maincanvas.visible=true;
+    },optioncanvas);
+}

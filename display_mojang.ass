@@ -1,0 +1,176 @@
+
+function mojang(time)
+{
+    var canvas=$.createCanvas({lifeTime:time});
+    canvas.transform.matrix3D = null;
+    var bg=$.createShape({lifeTime:time,parent:canvas});
+    bg.transform.matrix3D = null;
+    bg.graphics.beginFill(0xffffff);
+    bg.graphics.drawRect(-2,-2,$.width+4,$.height+4);
+    bg.graphics.endFill();
+
+    var logo1=$.createShape({lifeTime:time,parent:canvas});
+    logo1.transform.matrix3D = null;
+    logo1.graphics.beginFill(0xdd4f3b);
+    logo1.graphics.moveTo(282.0/1600.0*$.width,371.0/900.0*$.height);
+    logo1.graphics.lineTo(415.0/1600.0*$.width,371.0/900.0*$.height);
+    logo1.graphics.curveTo(421.0/1600.0*$.width,371.0/900.0*$.height,423.0/1600.0*$.width,377.0/900.0*$.height);
+    logo1.graphics.lineTo(423.0/1600.0*$.width,476.0/900.0*$.height);
+    logo1.graphics.curveTo(423.0/1600.0*$.width,482.0/900.0*$.height,415.0/1600.0*$.width,482.0/900.0*$.height);
+    logo1.graphics.lineTo(282.0/1600.0*$.width,482.0/900.0*$.height);
+    logo1.graphics.curveTo(274.0/1600.0*$.width,482.0/900.0*$.height,274.0/1600.0*$.width,476.0/900.0*$.height);
+    logo1.graphics.lineTo(274.0/1600.0*$.width,377.0/900.0*$.height);
+    logo1.graphics.curveTo(274.0/1600.0*$.width,371.0/900.0*$.height,282.0/1600.0*$.width,371.0/900.0*$.height);
+    logo1.graphics.endFill();
+
+    var logo1_1=$.createShape({lifeTime:time,parent:canvas});
+    logo1_1.transform.matrix3D=null;
+    logo1_1.graphics.beginFill(0xffffff);
+    logo1_1.graphics.moveTo(295.0/1600.0*$.width,393.0/900.0*$.height);
+    logo1_1.graphics.lineTo(340.0/1600.0*$.width,393.0/900.0*$.height);
+    logo1_1.graphics.curveTo(351.0/1600.0*$.width,394.0/900.0*$.height,357.0/1600.0*$.width,402.0/900.0*$.height);
+    logo1_1.graphics.lineTo(365.0/1600.0*$.width,402.0/900.0*$.height);
+    logo1_1.graphics.lineTo(365.0/1600.0*$.width,393.0/900.0*$.height);
+    logo1_1.graphics.curveTo(379.0/1600.0*$.width,397.0/900.0*$.height,386.0/1600.0*$.width,408.0/900.0*$.height);
+    logo1_1.graphics.lineTo(394.0/1600.0*$.width,408.0/900.0*$.height);
+    logo1_1.graphics.curveTo(394.0/1600.0*$.width,405.0/900.0*$.height,398.0/1600.0*$.width,405.0/900.0*$.height);
+    logo1_1.graphics.curveTo(407.0/1600.0*$.width,413.0/900.0*$.height,407.0/1600.0*$.width,445.0/900.0*$.height);
+    logo1_1.graphics.curveTo(381.0/1600.0*$.width,408.0/900.0*$.height,345.0/1600.0*$.width,408.0/900.0*$.height);
+    logo1_1.graphics.curveTo(309.0/1600.0*$.width,408.0/900.0*$.height,309.0/1600.0*$.width,433.0/900.0*$.height);
+    logo1_1.graphics.curveTo(309.0/1600.0*$.width,463.0/900.0*$.height,344.0/1600.0*$.width,463.0/900.0*$.height);
+    logo1_1.graphics.lineTo(411.0/1600.0*$.width,463.0/900.0*$.height);
+    logo1_1.graphics.curveTo(411.0/1600.0*$.width,473.0/900.0*$.height,402.0/1600.0*$.width,473.0/900.0*$.height);
+    logo1_1.graphics.lineTo(295.0/1600.0*$.width,473.0/900.0*$.height);
+    logo1_1.graphics.curveTo(291.0/1600.0*$.width,473.0/900.0*$.height,287.0/1600.0*$.width,470.0/900.0*$.height);
+    logo1_1.graphics.lineTo(287.0/1600.0*$.width,399.0/900.0*$.height);
+    logo1_1.graphics.curveTo(287.0/1600.0*$.width,393.0/900.0*$.height,295.0/1600.0*$.width,393.0/900.0*$.height);
+    logo1_1.graphics.endFill();
+
+    var logo1_2=$.createShape({lifeTime:time,parent:canvas});
+    logo1_2.transform.matrix3D=null;
+    logo1_2.graphics.beginFill(0xffffff);
+    logo1_2.graphics.moveTo(388.0/1600.0*$.width,376.0/900.0*$.height);
+    logo1_2.graphics.curveTo(395.0/1600.0*$.width,376.0/900.0*$.height,397.0/1600.0*$.width,392.0/900.0*$.height);
+    logo1_2.graphics.curveTo(397.0/1600.0*$.width,399.0/900.0*$.height,388.0/1600.0*$.width,399.0/900.0*$.height);
+    logo1_2.graphics.curveTo(377.0/1600.0*$.width,399.0/900.0*$.height,378.0/1600.0*$.width,392.0/900.0*$.height);
+    logo1_2.graphics.curveTo(381.0/1600.0*$.width,376.0/900.0*$.height,388.0/1600.0*$.width,376.0/900.0*$.height);
+    logo1_2.graphics.endFill();
+
+    var logoM =$.createShape({lifeTime:time,parent:canvas});
+    logoM.transform.matrix3D = null;
+    logoM.graphics.beginFill(0xf6883e);
+    logoM.graphics.moveTo(439.0/1600.0*$.width,371.0/900.0*$.height);
+    logoM.graphics.lineTo(499.0/1600.0*$.width,371.0/900.0*$.height);
+    logoM.graphics.lineTo(524.0/1600.0*$.width,438.0/900.0*$.height);
+    logoM.graphics.lineTo(549.0/1600.0*$.width,371.0/900.0*$.height);
+    logoM.graphics.lineTo(609.0/1600.0*$.width,371.0/900.0*$.height);
+    logoM.graphics.lineTo(609.0/1600.0*$.width,482.0/900.0*$.height);
+    logoM.graphics.lineTo(572.0/1600.0*$.width,482.0/900.0*$.height);
+    logoM.graphics.lineTo(572.0/1600.0*$.width,402.0/900.0*$.height);
+    logoM.graphics.lineTo(541.0/1600.0*$.width,482.0/900.0*$.height);
+    logoM.graphics.lineTo(508.0/1600.0*$.width,482.0/900.0*$.height);
+    logoM.graphics.lineTo(477.0/1600.0*$.width,402.0/900.0*$.height);
+    logoM.graphics.lineTo(477.0/1600.0*$.width,482.0/900.0*$.height);
+    logoM.graphics.lineTo(439.0/1600.0*$.width,482.0/900.0*$.height);
+    logoM.graphics.lineTo(439.0/1600.0*$.width,371.0/900.0*$.height);
+    logoM.graphics.endFill();
+
+    var logoO_1 =$.createShape({lifeTime:time,parent:canvas});
+    logoO_1.transform.matrix3D = null;
+    logoO_1.graphics.beginFill(0xf6883e);
+    logoO_1.graphics.moveTo(687.0/1600.0*$.width,371.0/900.0*$.height);
+    logoO_1.graphics.curveTo(764.0/1600.0*$.width,368.0/900.0*$.height,764.0/1600.0*$.width,427.0/900.0*$.height);
+    logoO_1.graphics.curveTo(769.0/1600.0*$.width,482.0/900.0*$.height,688.0/1600.0*$.width,482.0/900.0*$.height);
+    logoO_1.graphics.curveTo(611.0/1600.0*$.width,485.0/900.0*$.height,611.0/1600.0*$.width,428.0/900.0*$.height);
+    logoO_1.graphics.curveTo(611.0/1600.0*$.width,367.0/900.0*$.height,687.0/1600.0*$.width,371.0/900.0*$.height);
+    logoO_1.graphics.endFill();
+
+    var logoO_2 =$.createShape({lifeTime:time,parent:canvas});
+    logoO_2.transform.matrix3D = null;
+    logoO_2.graphics.beginFill(0xffffff);
+    logoO_2.graphics.moveTo(690.0/1600.0*$.width,396.0/900.0*$.height);
+    logoO_2.graphics.curveTo(718.0/1600.0*$.width,395.0/900.0*$.height,718.0/1600.0*$.width,427.0/900.0*$.height);
+    logoO_2.graphics.curveTo(719.0/1600.0*$.width,460.0/900.0*$.height,690.0/1600.0*$.width,460.0/900.0*$.height);
+    logoO_2.graphics.curveTo(656.0/1600.0*$.width,461.0/900.0*$.height,656.0/1600.0*$.width,430.0/900.0*$.height);
+    logoO_2.graphics.curveTo(656.0/1600.0*$.width,395.0/900.0*$.height,690.0/1600.0*$.width,396.0/900.0*$.height);
+    logoO_2.graphics.endFill();
+
+    var logoJ =$.createShape({lifeTime:time,parent:canvas});
+    logoJ.transform.matrix3D = null;
+    logoJ.graphics.beginFill(0xf6883e);
+    logoJ.graphics.moveTo(832.0/1600.0*$.width,371.0/900.0*$.height);
+    logoJ.graphics.lineTo(878.0/1600.0*$.width,371.0/900.0*$.height);
+    logoJ.graphics.lineTo(878.0/1600.0*$.width,451.0/900.0*$.height);
+    logoJ.graphics.curveTo(878.0/1600.0*$.width,484.0/900.0*$.height,820.0/1600.0*$.width,484.0/900.0*$.height);
+    logoJ.graphics.curveTo(762.0/1600.0*$.width,484.0/900.0*$.height,762.0/1600.0*$.width,460.0/900.0*$.height);
+    logoJ.graphics.lineTo(762.0/1600.0*$.width,442.0/900.0*$.height);
+    logoJ.graphics.lineTo(801.0/1600.0*$.width,442.0/900.0*$.height);
+    logoJ.graphics.curveTo(801.0/1600.0*$.width,457.0/900.0*$.height,818.0/1600.0*$.width,457.0/900.0*$.height);
+    logoJ.graphics.curveTo(832.0/1600.0*$.width,457.0/900.0*$.height,832.0/1600.0*$.width,442.0/900.0*$.height);
+    logoJ.graphics.lineTo(831.0/1600.0*$.width,371.0/900.0*$.height);
+    logoJ.graphics.endFill();
+
+    var logoA_1 =$.createShape({lifeTime:time,parent:canvas});
+    logoA_1.transform.matrix3D = null;
+    logoA_1.graphics.beginFill(0xf6883e);
+    logoA_1.graphics.moveTo(925.0/1600.0*$.width,371.0/900.0*$.height);
+    logoA_1.graphics.lineTo(971.0/1600.0*$.width,371.0/900.0*$.height);
+    logoA_1.graphics.lineTo(1027.0/1600.0*$.width,482.0/900.0*$.height);
+    logoA_1.graphics.lineTo(983.0/1600.0*$.width,482.0/900.0*$.height);
+    logoA_1.graphics.lineTo(973.0/1600.0*$.width,463.0/900.0*$.height);
+    logoA_1.graphics.lineTo(923.0/1600.0*$.width,463.0/900.0*$.height);
+    logoA_1.graphics.lineTo(913.0/1600.0*$.width,482.0/900.0*$.height);
+    logoA_1.graphics.lineTo(869.0/1600.0*$.width,482.0/900.0*$.height);
+    logoA_1.graphics.lineTo(925.0/1600.0*$.width,371.0/900.0*$.height);
+    logoA_1.graphics.endFill();
+
+    var logoA_2 =$.createShape({lifeTime:time,parent:canvas});
+    logoA_2.transform.matrix3D = null;
+    logoA_2.graphics.beginFill(0xffffff);
+    logoA_2.graphics.moveTo(948.0/1600.0*$.width,405.0/900.0*$.height);
+    logoA_2.graphics.lineTo(964.0/1600.0*$.width,442.0/900.0*$.height);
+    logoA_2.graphics.lineTo(931.0/1600.0*$.width,442.0/900.0*$.height);
+    logoA_2.graphics.lineTo(948.0/1600.0*$.width,405.0/900.0*$.height);
+    logoA_2.graphics.endFill();
+
+    var logoN =$.createShape({lifeTime:time,parent:canvas});
+    logoN.transform.matrix3D = null;
+    logoN.graphics.beginFill(0xf6883e);
+    logoN.graphics.moveTo(1026.0/1600.0*$.width,371.0/900.0*$.height);
+    logoN.graphics.lineTo(1064.0/1600.0*$.width,371.0/900.0*$.height);
+    logoN.graphics.lineTo(1125.0/1600.0*$.width,433.0/900.0*$.height);
+    logoN.graphics.lineTo(1125.0/1600.0*$.width,371.0/900.0*$.height);
+    logoN.graphics.lineTo(1167.0/1600.0*$.width,371.0/900.0*$.height);
+    logoN.graphics.lineTo(1167.0/1600.0*$.width,482.0/900.0*$.height);
+    logoN.graphics.lineTo(1125.0/1600.0*$.width,482.0/900.0*$.height);
+    logoN.graphics.lineTo(1068.0/1600.0*$.width,424.0/900.0*$.height);
+    logoN.graphics.lineTo(1068.0/1600.0*$.width,482.0/900.0*$.height);
+    logoN.graphics.lineTo(1026.0/1600.0*$.width,482.0/900.0*$.height);
+    logoN.graphics.lineTo(1026.0/1600.0*$.width,371.0/900.0*$.height);
+    logoN.graphics.endFill();
+
+    var logoG =$.createShape({lifeTime:time,parent:canvas});
+    logoG.transform.matrix3D = null;
+    logoG.graphics.beginFill(0xf6883e);
+    logoG.graphics.moveTo(1237.0/1600.0*$.width,371.0/900.0*$.height);
+    logoG.graphics.lineTo(1278.0/1600.0*$.width,371.0/900.0*$.height);
+    logoG.graphics.curveTo(1309.0/1600.0*$.width,377.0/900.0*$.height,1320.0/1600.0*$.width,399.0/900.0*$.height);
+    logoG.graphics.lineTo(1280.0/1600.0*$.width,408.0/900.0*$.height);
+    logoG.graphics.curveTo(1267.0/1600.0*$.width,396.0/900.0*$.height,1252.0/1600.0*$.width,396.0/900.0*$.height);
+    logoG.graphics.curveTo(1221.0/1600.0*$.width,396.0/900.0*$.height,1221.0/1600.0*$.width,414.0/900.0*$.height);
+    logoG.graphics.lineTo(1221.0/1600.0*$.width,439.0/900.0*$.height);
+    logoG.graphics.curveTo(1221.0/1600.0*$.width,457.0/900.0*$.height,1254.0/1600.0*$.width,457.0/900.0*$.height);
+    logoG.graphics.curveTo(1287.0/1600.0*$.width,457.0/900.0*$.height,1286.0/1600.0*$.width,442.0/900.0*$.height);
+    logoG.graphics.lineTo(1254.0/1600.0*$.width,442.0/900.0*$.height);
+    logoG.graphics.lineTo(1254.0/1600.0*$.width,420.0/900.0*$.height);
+    logoG.graphics.lineTo(1324.0/1600.0*$.width,420.0/900.0*$.height);
+    logoG.graphics.lineTo(1324.0/1600.0*$.width,463.0/900.0*$.height);
+    logoG.graphics.curveTo(1324.0/1600.0*$.width,482.0/900.0*$.height,1253.0/1600.0*$.width,482.0/900.0*$.height);
+    logoG.graphics.curveTo(1175.0/1600.0*$.width,485.0/900.0*$.height,1175.0/1600.0*$.width,423.0/900.0*$.height);
+    logoG.graphics.curveTo(1175.0/1600.0*$.width,371.0/900.0*$.height,1237.0/1600.0*$.width,371.0/900.0*$.height);
+    logoG.graphics.endFill();
+
+}
+
+mojang(3);
+

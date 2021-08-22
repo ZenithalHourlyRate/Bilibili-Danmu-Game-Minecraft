@@ -1,0 +1,8 @@
+var bili_b2 =$.createShape({lifeTime:time,parent:firstcan});
+bili_b2.transform.matrix3D = null;
+bili_b2.graphics.beginFill(0xffffff);
+bili_b2.graphics.moveTo(525.0/1600.0*$.width,525.0/900.0*$.height);
+bili_b2.graphics.lineTo(583.0/1600.0*$.width,545.0/900.0*$.height);
+bili_b2.graphics.lineTo(533.0/1600.0*$.width,583.0/900.0*$.height);
+bili_b2.graphics.lineTo(525.0/1600.0*$.width,525.0/900.0*$.height);
+bili_b2.graphics.endFill();

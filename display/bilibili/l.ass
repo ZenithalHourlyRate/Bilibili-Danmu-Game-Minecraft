@@ -1,0 +1,9 @@
+var bili_l =$.createShape({lifeTime:time,parent:firstcan});
+bili_l.transform.matrix3D = null;
+bili_l.graphics.beginFill(0x05b3fc);
+bili_l.graphics.moveTo(679.0/1600.0*$.width,327.0/900.0*$.height);
+bili_l.graphics.curveTo(712.0/1600.0*$.width,321.0/900.0*$.height,718.0/1600.0*$.width,325.0/900.0*$.height);
+bili_l.graphics.curveTo(737.0/1600.0*$.width,569.0/900.0*$.height,739.0/1600.0*$.width,577.0/900.0*$.height);
+bili_l.graphics.lineTo(711.0/1600.0*$.width,577.0/900.0*$.height);
+bili_l.graphics.curveTo(690.0/1600.0*$.width,340.0/900.0*$.height,679.0/1600.0*$.width,327.0/900.0*$.height);
+bili_l.graphics.endFill();

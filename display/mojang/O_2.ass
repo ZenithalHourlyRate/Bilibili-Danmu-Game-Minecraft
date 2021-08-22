@@ -1,0 +1,8 @@
+var logoO_2 =$.createShape({lifeTime:time,parent:canvas});
+logoO_2.transform.matrix3D = null;
+logoO_2.graphics.beginFill(0xffffff);
+logoO_2.graphics.moveTo(690.0/1600.0*$.width,396.0/900.0*$.height);
+logoO_2.graphics.curveTo(718.0/1600.0*$.width,395.0/900.0*$.height,718.0/1600.0*$.width,427.0/900.0*$.height);
+logoO_2.graphics.curveTo(719.0/1600.0*$.width,460.0/900.0*$.height,690.0/1600.0*$.width,460.0/900.0*$.height);
+logoO_2.graphics.curveTo(656.0/1600.0*$.width,461.0/900.0*$.height,656.0/1600.0*$.width,430.0/900.0*$.height);
+logoO_2.graphics.curveTo(656.0/1600.0*$.width,395.0/900.0*$.height,690.0/1600.0*$.width,396.0/900.0*$.height);

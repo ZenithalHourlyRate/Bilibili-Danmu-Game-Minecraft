@@ -1,0 +1,245 @@
+/*
+*Mouse
+*/
+
+
+function findfocus()
+{
+    if($G._get("MC_state")=="playing"&&$G._get("MC_mousein"))
+    {
+            var zhigh=Math.sin(steve.see[1]/360.0*2*Math.PI);
+            var coordlong=Math.abs(Math.cos(steve.see[1]/360.0*2*Math.PI));
+            var angle=steve.see[0]%90.0/360.0*2.0*Math.PI;
+        for(var index=0.0;index<=5.0;index+=0.2)
+        {
+            var height=index*zhigh;
+            var lengthco=index*coordlong;
+            var cosone=lengthco*Math.cos(angle);
+            var sinone=lengthco*Math.sin(angle);
+            if(steve.see[0]>=0&&steve.see[0]<90)
+            {
+                if(existblock(steve.x+cosone,steve.y+sinone,steve.z+1+height))
+                {
+                    return [steve.x+cosone,steve.y+sinone,steve.z+1+height];
+                }
+            }
+            else if(steve.see[0]>=90&&steve.see[0]<180)
+            {
+                if(existblock(steve.x-sinone,steve.y+cosone,steve.z+1+height))
+                {
+                    return [steve.x-sinone,steve.y+cosone,steve.z+1+height];
+                }
+            }
+            else if(steve.see[0]>=180&&steve.see[0]<270)
+            {
+                if(existblock(steve.x-cosone,steve.y-sinone,steve.z+1+height))
+                {
+                    return [steve.x-cosone,steve.y-sinone,steve.z+1+height];
+                }
+            }
+            else if(steve.see[0]>=270&&steve.see[0]<360)
+            {
+                if(existblock(steve.x+sinone,steve.y-cosine,steve.z+1+height))
+                {
+                    return [steve.x+sinone,steve.y-cosine,steve.z+1+height];
+                }
+            }
+            else ;
+        }
+        return [];
+    }
+}
+
+function mouseMove(event)
+{
+    if($G._get("MC_state")=="playing"&&$G._get("MC_mousein"))
+    {
+    log("视线移动");
+    var x=event.stageX-oldMousePlace[0];
+    var y=event.stageY-oldMousePlace[1];
+    var xchanges=x/($.width/2)*180;
+    steve.see[0]-=xchages;
+    if(steve.see[0]>=360)steve.see[0]-=360;
+    if(steve.see[0]<0)steve.see[0]+=360;
+    var ychanges=y/($.height/2)*90;
+    steve.see[1]-=ychanges;
+    if(steve.see[1]>=90)steve.see[1]=90;
+    if(steve.see[1]<=-90)steve.see[1]=-90;
+    oldMousePlace[0]=event.stageX;
+    oldMousePlace[1]=event.stageY;
+    }
+}
+
+var oldMousePlace=[$.width/2,$.height/2];
+var building=false;
+
+function mouseClick(event)
+{
+if(!building){
+    if($G._get("MC_state")=="playing"&&$G._get("MC_mousein"))
+    {
+    var focused=findfocus();
+        if(typeof (focused[0])!="undefined")
+        {log("方块破坏");
+        destroyBlock(focused[0],focused[1],focused[2]);
+        }
+    }
+}/*
+}
+
+function mouseRightClick(event)
+{*/else{
+    if($G._get("MC_state")=="playing"&&$G._get("MC_mousein"))
+    {
+    var focused=findfocus();
+    var focused=ceilxyz(focused[0],focused[1],focused[2]);
+    if(focused[0]!=undefined)
+    {   log("方块建造");
+        var udlrfb=[false,false,false,false,false,false];
+        udlrfb[ ( steve.x> (focused[0]+0.5) ) ? 3: ( (steve.x<(focused[0]-0.5))?2:7)]=true;
+        udlrfb[ ( steve.y> (focused[1]+0.5) ) ? 5: ( (steve.y<(focused[1]-0.5))?4:7)]=true;
+        udlrfb[ ((steve.z+1)>(focused[2]+0.5))?0:( ( (steve.z+1)<(focused[2]-0.5) )?1:7)]=true;
+        if(udlrfb[0]==true||udlrfb[1]==true){
+                var range;
+                if(udlrfb[0]==true)range=(steve.z+1.0-(focused[2]+0.5));
+                else range=(focused[2]-0.5-(steve.z+1.0));
+                var xylong=range / (Math.tan(Math.abs(steve.see[1])/360.0*2.0*Math.PI));
+                var angle=steve.see[0]%90.0/360.0*2.0*Math.PI;
+                if(steve.see[0]>=0&&steve.see[0]<90){
+                    if( (xylong*Math.cos(angle)+steve.x)<(focused[0]+0.5)
+                    &&(xylong*Math.cos(angle)+steve.x)>(focused[0]-0.5)
+                    && (xylong*Math.sin(angle)+steve.y)>(focused[1]-0.5)
+                    &&(xylong*Math.sin(angle)+steve.y)<(focused[1]+0.5) ){
+                        steve.putblock(focused[0],focused[1],focused[2]+((udlrfb[0]==true)?1:-1)])
+                        return ;
+                    }
+                }
+                else if(steve.see[0]>=90&&steve.see[0]<180){
+                    if( (xylong*Math.cos(angle)+steve.y)<(focused[1]+0.5)
+                    &&(xylong*Math.cos(angle)+steve.y)>(focused[1]-0.5)
+                    && ( -xylong*Math.sin(angle)+steve.x)>(focused[0]-0.5)
+                    &&( -xylong*Math.sin(angle)+steve.x)<(focused[0]+0.5) ){
+                        steve.putblock(focused[0],focused[1],focused[2]+((udlrfb[0]==true)?1:-1)])
+                        return ;
+                    }
+                }
+                else if(steve.see[0]>=180&&steve.see[0]<270){
+                    if( (-xylong*Math.cos(angle)+steve.x)<(focused[0]+0.5)
+                    &&(-xylong*Math.cos(angle)+steve.x)>(focused[0]-0.5)
+                    && (-xylong*Math.sin(angle)+steve.y)>(focused[1]-0.5)
+                    &&(-xylong*Math.sin(angle)+steve.y)<(focused[1]+0.5) ){
+                       steve.putblock(focused[0],focused[1],focused[2]+((udlrfb[0]==true)?1:-1)])
+                        return ;
+                    }
+                }
+                else if(steve.see[0]>=270&&steve.see[0]<360)
+                {
+                    if( (-xylong*Math.cos(angle)+steve.y)<(focused[1]+0.5)
+                    &&(-xylong*Math.cos(angle)+steve.y)>(focused[1]-0.5)
+                    && ( xylong*Math.sin(angle)+steve.x)>(focused[0]-0.5)
+                    &&( xylong*Math.sin(angle)+steve.x)<(focused[0]+0.5) ){
+                        steve.putblock(focused[0],focused[1],focused[2]+((udlrfb[0]==true)?1:-1)])
+                        return ;
+                    }
+                }
+        }
+        if(udlrfb[2]==true||udlrfb[3]==true){
+            if(steve.see[0]>=0&&steve.see[0]<90 ){
+            var range=focused[0]-0.5-steve.x;
+            var angle=steve.see[0]%90.0/360.0*2.0*Math.PI;
+                if( (range*Math.tan(angle)+steve.y)< (focused[1]+0.5)
+                &&(range*Math.tan(angle)+steve.y)> (focused[1]-0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )<(focused[2]+0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )>(focused[2]-0.5) ){
+                    steve.putblock(focused[0]-1,focused[1],focused[2]);
+                    return ;
+                }
+            }
+            else if(steve.see[0]>=270&&steve.see[0]<360){
+            var range=focused[0]-0.5-steve.x;
+            var angle=(90.0-steve.see[0]%90.0)/360.0*2.0*Math.PI;
+                if( (-range*Math.tan(angle)+steve.y)< (focused[1]+0.5)
+                &&(-range*Math.tan(angle)+steve.y)> (focused[1]-0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )<(focused[2]+0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )>(focused[2]-0.5) ){
+                    steve.putblock(focused[0]-1,focused[1],focused[2]);
+                    return ;
+                }
+            }
+            else if(steve.see[0]>=90&&steve.see[0]<180){
+            var range=steve.x-(focused[0]+0.5);
+            var angle=(90.0-steve.see[0]%90.0)/360.0*2.0*Math.PI;
+                if( (range*Math.tan(angle)+steve.y)< (focused[1]+0.5)
+                &&(range*Math.tan(angle)+steve.y)> (focused[1]-0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )<(focused[2]+0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )>(focused[2]-0.5) ){
+                    steve.putblock(focused[0]+1,focused[1],focused[2]);
+                    return ;
+                }
+            }
+            else if(steve.see[0]>=180&&steve.see[0]<270){
+            var range=steve.x-(focused[0]+0.5);
+            var angle=steve.see[0]%90.0/360.0*2.0*Math.PI;
+                if( (-range*Math.tan(angle)+steve.y)< (focused[1]+0.5)
+                &&(-range*Math.tan(angle)+steve.y)> (focused[1]-0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )<(focused[2]+0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )>(focused[2]-0.5) ){
+                    steve.putblock(focused[0]+1,focused[1],focused[2]);
+                    return ;
+                }
+            }
+        }
+        if(udlrfb[4]==true||udlrfb[5]==true){
+            if(steve.see[0]>=0&&steve.see[0]<90){
+                var range=focused[1]-0.5-steve.y;
+                var angle=steve.see[0]%90.0/360.0*2.0*Math.PI;
+                if( (range/Math.tan(angle)+steve.x) > (focused[0]-0.5)
+                &&(range/Math.tan(angle)+steve.x) < (focused[0]+0.5)
+                &&((range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)<(focused[2]+0.5))
+                &&((range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)>(focused[2]-0.5))){
+                    steve.putblock(focused[0],focused[1]-1,focused[2]);
+                    return ;
+                }
+            }
+            else if(steve.see[0]>=90&&steve.see[0]<180){
+                var range=focused[1]-0.5-steve.y;
+                var angle=(90.0-steve.see[0]%90.0)/360.0*2.0*Math.PI;
+                if( (-range/Math.tan(angle)+steve.x) > (focused[0]-0.5)
+                &&(-range/Math.tan(angle)+steve.x) < (focused[0]+0.5)
+                &&((range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)<(focused[2]+0.5))
+                &&((range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)>(focused[2]-0.5))){
+                    steve.putblock(focused[0],focused[1]-1,focused[2]);
+                    return ;
+                }
+            }
+            else if(steve.see[0]>=180&&steve.see[0]<270){
+                var range=steve.y-(focused[1]+0.5);
+                var angle=steve.see[0]%90.0/360.0*2.0*Math.PI;
+                if( (-range/Math.tan(angle)+steve.x) > (focused[0]-0.5)
+                &&(-range/Math.tan(angle)+steve.x) < (focused[0]+0.5)
+                &&(range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)>(focused[2]-0.5)
+                &&(range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)<(focused[2]+0.5) ){
+                    steve.putblock(focused[0],focused[1]+1,focused[2]);
+                    return ;
+                }
+            }
+            else if(steve.see[0]>=270&&steve.see[0]<360){
+                var range=steve.y-(focused[1]+0.5);
+                var angle=(90.0-steve.see[0]%90.0)/360.0*2.0*Math.PI;
+                if( (range/Math.tan(angle)+steve.x) > (focused[0]-0.5)
+                &&(range/Math.tan(angle)+steve.x) < (focused[0]+0.5)
+                &&(range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)>(focused[2]-0.5)
+                &&(range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)<(focused[2]+0.5) ){
+                    steve.putblock(focused[0],focused[1]+1,focused[2]);
+                    return ;
+                }
+            }
+        }
+    }
+    }
+}
+}
+$.root.mouseEnabled=true;
+$.root.addEventListener("mouseDown",mouseClick);
+$.root.addEventListener("mouseMove",mouseMove);
+/*$.root.addEventListener("rightClick",mouseRightClick);*/

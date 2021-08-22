@@ -1,0 +1,1828 @@
+/**Minecraft --dammu ver 0.01
+*used block 0,1,2,7,
+*0 to air
+*1 to stone
+*2 to grass dirt
+*3 to dirt
+*5** to wood
+*7 to bed stone
+*12 to sand
+*14 to Gold mine
+*15 to iron mine
+*16 to Coal mine
+*17 to tree
+*35** to sheep cut (of all kinds of color)
+*46 to TNT
+*56 to diamond mine
+*/
+var worldbase=[];
+var worldextra=[];
+var steve=
+{
+    x:0.1,
+    y:0.1,
+    z:0.1
+};
+var worldX;
+var worldY;
+var worldZ;
+var landline=64;
+
+var block0=0;
+var block1=1;
+var block2=2;
+var block3=3;
+var block500=500;var block501=501;var block502=502;var block503=503;var block504=504;var block505=505;
+var block7=7;
+var block12=12;
+var block14=14;
+var block15=15;
+var block16=16;
+var block17=17;
+var block3500=3500;var block3501=3501;var block3502=3503;var block3503=3503;var block3504=3504;var block3505=3505;
+var block3506=3506;var block3507=3507;var block3508=3508;var block3509=3509;var block3510=3510;var block3511=3511;
+var block3512=3512;var block3513=3513;var block3514=3514;var block3515=3515;/*Sheep cut*/
+var block46=46;
+var block56=56;
+
+var block=[block0,block1,block2,block3,
+                block500,block501,block502,block503,block504,block505,
+                block7,block12,block14,block15,block16,block17,
+                block3500,block3501,block3502,block3503,block3504,block3505,block3506,
+                block3507,block3508,block3509,block3510,block3511,block3512,block3513,block3514,block3515,
+                block56,block46];
+var blockbuild=[block1,block2,block3,
+                block500,block501,block502,block503,block504,block505,
+                block7,block12,block14,block15,block16,block17,
+                block3500,block3501,block3502,block3503,block3504,block3505,block3506,
+                block3507,block3508,block3509,block3510,block3511,block3512,block3513,block3514,block3515,
+                block56,block46];
+var blocknormal=[block1,block2,block3,
+                block500,
+                block7,block12,block14,block15,block16,block17,
+                block3500,
+                block56,block46];
+var blockbear=[block46];
+
+
+var startcanvas=$.createCanvas({lifeTime:0});
+startcanvas.transform.matrix3D=null;
+ScriptManager.popEl(startcanvas);
+$.root.addChild(startcanvas);
+var maincanvas=$.createCanvas({lifeTime:0,parent:startcanvas});
+maincanvas.transform.matrix3D=null;
+ScriptManager.popEl(maincanvas);
+startcanvas.addChild(maincanvas);
+var optioncanvas=$.createCanvas({lifeTime:0,parent:startcanvas});
+optioncanvas.transform.matrix3D=null;
+ScriptManager.popEl(optioncanvas);
+startcanvas.addChild(optioncanvas);
+var gamecanvas=$.createCanvas({lifeTime:0});
+ScriptManager.popEl(gamecanvas);
+$.root.addChild(gamecanvas);
+var backgroundcanvas=$.createCanvas({lifeTime:0,parent:gamecanvas});
+backgroundcanvas.transform.matrix3D=null;
+ScriptManager.popEl(backgroundcanvas);
+gamecanvas.addChild(backgroundcanvas);
+var blockcanvas=$.createCanvas({lifeTime:0,parent:gamecanvas});
+ScriptManager.popEl(blockcanvas);
+gamecanvas.addChild(blockcanvas);
+var blankcanvas=$.createCanvas({lifeTime:0,parent:gamecanvas});
+blankcanvas.transform.matrix3D=null;
+ScriptManager.popEl(blankcanvas);
+gamecanvas.addChild(blankcanvas);
+var logcanvas=$.createCanvas({lifeTime:0,parent:gamecanvas});
+logcanvas.transform.matrix3D=null;
+ScriptManager.popEl(logcanvas);
+gamecanvas.addChild(logcanvas);
+var pausecanvas=$.createCanvas({lifeTime:0,parent:gamecanvas});
+pausecanvas.transform.matrix3D=null;
+ScriptManager.popEl(pausecanvas);
+gamecanvas.addChild(pausecanvas);
+var danmucanvas=$.createCanvas({lifeTime:0});
+danmucanvas.transform.matrix3D=null;
+ScriptManager.popEl(danmucanvas);
+$.root.addChild(danmucanvas);
+
+$.root.addEventListener("enterFrame",function(){
+    $.root.setChildIndex(startcanvas,$.root.numChildren-1);
+    $.root.setChildIndex(gamecanvas,$.root.numChildren-1);
+    $.root.setChildIndex(danmucanvas,$.root.numChildren-1);
+});
+
+var seerange=[1,2,3,4,5,6,8,16,1024];
+var see_point=3;
+var building=false;
+var holdblock=blocknormal;
+var cursor=[5,10,15,20,25];
+var cursor_point=1;
+
+/*var blockcanvas=$.createCanvas({lifeTime:0,parent:canvas});
+var blankcanvas=$.createCanvas({lifeTime:0,parent:canvas});*/
+
+function steve_see(x,y,z){
+    var stee_x;var stee_y;var stee_z;
+    var xylong=Math.pow(Math.pow(Math.abs(x-steve.x),2)+Math.pow(Math.abs(y-steve.y),2),0.5);
+    var xyangle=Math.atan2(y-steve.y,x-steve.x)/(Math.PI*2.0)*360.0;
+    if(xyangle<0)xyangle=360.0+xyangle;
+    var xyallgle=steve.see[0]-xyangle;
+    var xyall_xuan=xyallgle/360.0*2.0*Math.PI;
+        if(xyallgle>=0&&xyallgle<90){
+            stee_x=xylong*Math.sin(xyall_xuan);
+            stee_y=xylong*Math.cos(xyall_xuan);
+        }
+        else if(xyallgle>=90&&xyallgle<180){
+            stee_x=xylong*Math.cos(xyall_xuan-0.5*Math.PI);
+            stee_y=-xylong*Math.sin(xyall_xuan-0.5*Math.PI);
+        }
+        else if(xyallgle>=180&&xyallgle<270){
+            stee_x=-xylong*Math.sin(xyall_xuan-Math.PI);
+            stee_y=-xylong*Math.cos(xyall_xuan-Math.PI);
+        }
+        else if(xyallgle>=270&&xyallgle<=360){
+            stee_x=-xylong*Math.cos(xyall_xuan-1.5*Math.PI);
+            stee_y=xylong*Math.sin(xyall_xuan-1.5*Math.PI);
+        }
+        else if(xyallgle>=-90&&xyallgle<0){
+            stee_x=-xylong*Math.sin(Math.abs(xyall_xuan));
+            stee_y=xylong*Math.cos(Math.abs(xyall_xuan));
+        }
+        else if(xyallgle>=-180&&xyallgle<-90){
+            stee_x=-xylong*Math.cos(Math.abs(xyall_xuan+0.5*Math.PI));
+            stee_y=-xylong*Math.sin(Math.abs(xyall_xuan+0.5*Math.PI));
+        }
+        else if(xyallgle>=-270&&xyallgle<-180){
+            stee_x=xylong*Math.sin(Math.abs(xyall_xuan+Math.PI));
+            stee_y=-xylong*Math.cos(Math.abs(xyall_xuan+Math.PI));
+        }
+        else if(xyallgle>=-360&&xyallgle<-270){
+            stee_x=xylong*Math.cos(Math.abs(xyall_xuan+1.5*Math.PI));
+            stee_y=xylong*Math.sin(Math.abs(xyall_xuan+1.5*Math.PI));
+        }
+    var yzlong=Math.pow(Math.pow(Math.abs(z-(steve.z+1)),2)+Math.pow(Math.abs(stee_y),2),0.5);
+    var yzangle=Math.atan2(z-(steve.z+1),stee_y)/(Math.PI*2.0)*360.0;
+    var yzallgle=steve.see[1]-yzangle;
+    var yzall_xuan=yzallgle/360.0*2.0*Math.PI;
+    if(yzallgle>=0&&yzallgle<90){
+        stee_y=yzlong*Math.cos(yzall_xuan);
+        stee_z=-yzlong*Math.sin(yzall_xuan);
+    }
+    else if(yzallgle>=90&&yzallgle<180){
+        stee_y=-yzlong*Math.sin(yzall_xuan-0.5*Math.PI);
+        stee_z=-yzlong*Math.cos(yzall_xuan-0.5*Math.PI);
+    }
+    else if(yzallgle>=180&&yzallgle<=270){
+        stee_y=-yzlong*Math.cos(yzall_xuan-Math.PI);
+        stee_z=yzlong*Math.sin(yzall_xuan-Math.PI);
+    }
+    else if(yzallgle>=-90&&yzallgle<0){
+        stee_y=yzlong*Math.cos(Math.abs(yzall_xuan));
+        stee_z=yzlong*Math.sin(Math.abs(yzall_xuan));
+    }
+    else if(yzallgle>=-180&&yzallgle<-90){
+        stee_y=-yzlong*Math.sin(Math.abs(yzall_xuan+0.5*Math.PI));
+        stee_z=yzlong*Math.cos(Math.abs(yzall_xuan+0.5*Math.PI));
+    }
+    else if(yzallgle>=-270&&yzallgle<-180){
+        stee_y=-yzlong*Math.cos(Math.abs(yzall_xuan+Math.PI));
+        stee_z=-yzlong*Math.sin(Math.abs(yzall_xuan+Math.PI));
+    }
+    else trace("steve see error!");
+    return [stee_x,stee_y,stee_z];
+}
+
+function blockface(p1,p2,p3){
+    var rotaX,rotaY,rotaZ;
+    var dis_p2=[];
+    var dis_p3=[];
+    dis_p2[0]=p2[0]-p1[0];
+    dis_p2[1]=p2[1]-p1[1];
+    dis_p2[2]=p2[2]-p1[2];
+    dis_p3[0]=p3[0]-p1[0];
+    dis_p3[1]=p3[1]-p1[1];
+    dis_p3[2]=p3[2]-p1[2];/*
+    trace("dis_p2",dis_p2[0],dis_p2[1],dis_p2[2]);
+    trace("dis_p3",dis_p3[0],dis_p3[1],dis_p3[2]);*/
+    var dis_p2_a=[];
+    var dis_p3_a=[];
+    dis_p2_a[0]=Math.atan2(dis_p2[1],dis_p2[0]);
+    dis_p2_a[0]=Math.round(dis_p2_a[0]/Math.PI*180.0)/180.0*Math.PI;
+    dis_p2_a[1]=Math.atan2(dis_p2[2],Math.pow(Math.pow(dis_p2[0],2)+Math.pow(dis_p2[1],2),0.5));
+    if(dis_p2_a[1]>=Math.PI/2)dis_p2_a[1]=Math.PI-dis_p2_a[1];
+    if(dis_p2_a[1]<=-Math.PI/2)dis_p2_a[1]=-Math.PI-dis_p2_a[1];
+    dis_p2_a[1]=Math.round(dis_p2_a[1]/Math.PI*180.0)/180.0*Math.PI;
+    dis_p3_a[0]=Math.atan2(dis_p3[1],dis_p3[0]);
+    dis_p3_a[0]=Math.round(dis_p3_a[0]/Math.PI*180.0)/180.0*Math.PI;
+    dis_p3_a[1]=Math.atan2(dis_p3[2],Math.pow(Math.pow(dis_p3[0],2)+Math.pow(dis_p3[1],2),0.5));
+    if(dis_p3_a[1]>=Math.PI/2)dis_p3_a[1]=Math.PI-dis_p3_a[1];
+    if(dis_p3_a[1]<=-Math.PI/2)dis_p3_a[1]=-Math.PI-dis_p3_a[1];
+    dis_p3_a[1]=Math.round(dis_p3_a[1]/Math.PI*180.0)/180.0*Math.PI;
+
+    rotaY=-dis_p2_a[0]/Math.PI*180.0;
+    dis_p3_a[0]-=dis_p2_a[0];
+    dis_p2_a[0]=0;
+    if(dis_p3_a[0]>Math.PI)dis_p3_a[0]=dis_p3_a[0]-2.0*Math.PI;
+    if(dis_p3_a[0]<-Math.PI)dis_p3_a[0]=dis_p3_a[0]+2.0*Math.PI;
+    dis_p2[0]=Math.pow(Math.pow(dis_p2[0],2)+Math.pow(dis_p2[1],2),0.5);
+    dis_p2[1]=0;
+    p3xy=Math.pow(Math.pow(dis_p3[0],2)+Math.pow(dis_p3[1],2),0.5);
+    if(dis_p3_a[0]>=0&&dis_p3_a[0]<Math.PI/2){
+    dis_p3[0]=p3xy*Math.cos(dis_p3_a[0]);
+    dis_p3[1]=p3xy*Math.sin(dis_p3_a[0]);
+    }
+    else if(dis_p3_a[0]>=Math.PI/2&&dis_p3_a[0]<=Math.PI){
+    dis_p3[0]=-p3xy*Math.sin(dis_p3_a[0]-Math.PI/2);
+    dis_p3[1]=p3xy*Math.cos(dis_p3_a[0]-Math.PI/2);
+    }
+    else if(dis_p3_a[0]>=-Math.PI/2&&dis_p3_a[0]<0){
+    dis_p3[0]=p3xy*Math.cos(-dis_p3_a[0]);
+    dis_p3[1]=-p3xy*Math.sin(-dis_p3_a[0]);
+    }
+    else if(dis_p3_a[0]>=-Math.PI&&dis_p3_a[0]<-Math.PI/2){
+    dis_p3[0]=-p3xy*Math.sin(-dis_p3_a[0]-Math.PI/2);
+    dis_p3[1]=-p3xy*Math.cos(-dis_p3_a[0]-Math.PI/2);
+    }
+    else trace("xy angle error");
+    dis_p3[0]=Math.round(dis_p3[0]*100.0)/100.0;
+    dis_p3[1]=Math.round(dis_p3[1]*100.0)/100.0;
+
+    /*trace("xy",dis_p3[0],dis_p3[1],dis_p3[2]);*/
+
+    rotaZ=-dis_p2_a[1]/Math.PI*180.0;
+    var xzangle=Math.atan2(dis_p3[2],dis_p3[0]);
+    xzangle=Math.round(xzangle/Math.PI*180.0)/180.0*Math.PI;
+    xzangle-=dis_p2_a[1];
+    if(xzangle>=Math.PI)xzangle=xzangle-Math.PI*2.0;
+    if(xzangle<=-Math.PI)xzangle=xzangle+Math.PI*2.0;
+    var p3xz=Math.pow(Math.pow(dis_p3[0],2)+Math.pow(dis_p3[2],2),0.5);
+    if(xzangle>=0&&xzangle<Math.PI/2){
+    dis_p3[0]=p3xz*Math.cos(xzangle);
+    dis_p3[2]=p3xz*Math.sin(xzangle);
+    }
+    else if(xzangle>=Math.PI/2&&xzangle<=Math.PI){
+    dis_p3[0]=-p3xz*Math.sin(xzangle-Math.PI/2);
+    dis_p3[2]=p3xz*Math.cos(xzangle-Math.PI/2);
+    }
+    else if(xzangle>=-Math.PI/2&&xzangle<0){
+    dis_p3[0]=p3xz*Math.cos(-xzangle);
+    dis_p3[2]=-p3xz*Math.sin(-xzangle);
+    }
+    else if(xzangle>=-Math.PI&&xzangle<-Math.PI/2){
+    dis_p3[0]=-p3xz*Math.sin(-xzangle-Math.PI/2);
+    dis_p3[2]=-p3xz*Math.cos(-xzangle-Math.PI/2);
+    }
+    else trace("xz angle error");
+    dis_p3[0]=Math.round(dis_p3[0]*100.0)/100.0;
+    dis_p3[2]=Math.round(dis_p3[2]*100.0)/100.0;
+
+    /*trace("xz",dis_p3[0],dis_p3[1],dis_p3[2]);*/
+
+    dis_p2_a[1]=0;
+    var yzangle=Math.atan2(dis_p3[2],dis_p3[1]);
+    yzangle=Math.round(yzangle/Math.PI*180.0)/180.0*Math.PI;
+    yzangle+=Math.PI/2;
+    rotaX=yzangle/Math.PI*180.0;
+    return [rotaX,rotaY,rotaZ];
+}
+
+function sortChild(canvas){
+    for(var index=0;index!=canvas.numChildren-1;++index){
+    for(var indexa=index+1;indexa!=canvas.numChildren;++indexa){
+	var temp1=canvas.getChildAt(indexa);
+	var temp2=canvas.getChildAt(index);
+        if(temp1.z>=temp2.z&&temp1.visible==true&&temp2.visible==true){
+		canvas.setChildIndex(temp1,index);
+		canvas.setChildIndex(temp2,indexa);
+	}
+    }
+}
+}
+
+function can_be_see(x,y,z){
+    if(getId(x,y,z)==block0)
+        return false;
+    else{
+    if( getId(x+1,y,z)==block0||getId(x-1,y,z)==block0
+       ||getId(x,y+1,z)==block0||getId(x,y-1,z)==block0
+       ||getId(x,y,z+1)==block0||getId(x,y,z-1)==block0 )
+        return true;
+    else return false;
+    }
+}
+
+var all_dis=[];
+var now_dis=0;
+
+function initdis(){
+    var bmd=Bitmap.createBitmapData(1,1,false,0x00000000);
+    for(var index1=0;index1!=256;++index1){
+        all_dis[index1]=Bitmap.createBitmap({bitmapData:bmd,lifeTime:0});
+        all_dis[index1].visible=false;
+        ScriptManager.popEl(all_dis[index1]);
+        (all_dis[index1]).setParent(blockcanvas);
+    }
+}
+function reinitdis(){
+    var bmd=Bitmap.createBitmapData(1,1,false,0x00000000);
+    var len=all_dis.length;
+    for(var index2=len;index2!=(len*2);++index2){
+        all_dis[index2]=Bitmap.createBitmap({bitmapData:bmd,lifeTime:0});
+        all_dis[index2].visible=false;
+        ScriptManager.popEl(all_dis[index2]);
+        (all_dis[index2]).setParent(blockcanvas);
+    }
+}
+function show_screen(rect,id){
+    /*var bitmap=Bitmap.createBitmap({bitmapData:$G._get("bmd_block"+id),smoothing:false,lifeTime:0});
+    bitmap.setParent(blockcanvas);
+    bitmap.x=$.width/2+$.height*stee_x-0.5*$.height;
+    bitmap.y=$.height/2-$.height*stee_z-0.5*$.height;
+    bitmap.z=stee_y*$.height;*/
+    trace(rect[0][0],rect[0][1],rect[0][2],rect[1][0],rect[1][1],rect[1][2],rect[2][0],rect[2][1],rect[2][2]);
+    if(now_dis>=all_dis.length)reinitdis();
+    all_dis[now_dis].visible=true;
+    all_dis[now_dis].bitmapData=$G._get("bmd_block"+id);
+    /*(all_dis[now_dis]).setParent(blockcanvas);*/
+    all_dis[now_dis].x=$.width/2+$.height*rect[0][0]-0.5*$.height;
+    all_dis[now_dis].y=$.height/2-$.height*rect[0][2]-0.5*$.height;
+    all_dis[now_dis].z=rect[0][1]*$.height;
+    var rotag=blockface(rect[0],rect[1],rect[2]);
+    all_dis[now_dis].rotationX=rotag[0];
+    all_dis[now_dis].rotationY=rotag[1];
+    all_dis[now_dis].rotationZ=rotag[2];
+    trace(rotag[0],rotag[1],rotag[2]);
+    ++now_dis;
+}
+
+function show_blank(){
+    while(blankcanvas.numChildren>0){
+        blankcanvas.removeChildAt(0);
+    }
+    var _plus=$.createComment("+",{fontsize:36,parent:blankcanvas,lifeTime:0});
+    _plus.transform.matrix3D=null;
+    _plus.filters=null;
+    _plus.x=$.width/2-_plus.textWidth/2;
+    _plus.y=$.height/2-_plus.textHeight/2;
+    var _blank=$.createShape({parent:blankcanvas,lifeTime:0});
+    _blank.transform.matrix3D=null;
+    _blank.graphics.lineStyle(5,0xff5d5d5d,1.0,true,"none","none","bevel");
+    for(var index1=0;index1!=9;index1++){
+        _blank.graphics.drawRect($.width/2-4.5*($.height/10)+index1*($.height/10),$.height-5-$.height/10,$.height/10,$.height/10);
+    }
+    if(!steve.select){
+        _blank.graphics.lineStyle(7,0xffa1b29d,1.0,true,"none","none","bevel");
+        _blank.graphics.drawRect($.width/2-4.5*($.height/10)+steve.blank_point*($.height/10),$.height-5-$.height/10,$.height/10,$.height/10);
+    }
+        _blank.graphics.endFill();
+    var _bmd=[];_bmd.length=9;
+    var _bitmap=[];_bitmap.length=9;
+    for(var index2=0;index2!=9;++index2){
+            var blockidp=steve.blank[index2];
+        _bmd[index2]=$G._get("bmd_blocks"+steve.blockhold[blockidp]);
+        _bitmap[index2]=Bitmap.createBitmap({bitmapData:_bmd[index2],smoothing:false,lifeTime:0});
+        _bitmap[index2].setParent(blankcanvas);
+        _bitmap[index2].transform.matrix3D=null;
+        _bitmap[index2].x=$.width/2-4.5*($.height/10)+($.height/20-16)+($.height/10)*index2;
+        _bitmap[index2].y=$.height+($.height/20-20)-$.height/10;
+    }
+    var _in_hand=steve.in_hand;
+    var _handblock=steve.blockhold[_in_hand];
+    var _handbmd=$G._get("bmd_blocks"+_handblock);
+    var _hand=Bitmap.createBitmap({bitmapData:_handbmd,smoothing:false,lifeTime:0});
+    _hand.setParent(blankcanvas);
+    _hand.transform.matrix3D=null;
+    _hand.x=$.width/2+4.5*($.height/10)+($.height/10)+($.height/20-16);
+    _hand.y=$.height-($.height/8);
+}
+
+function display_block(){
+    /*var bg=$.createShape({lifeTime:0,parent:blockcanvas});
+    bg.graphics.beginFill(0xfafafa);
+    bg.graphics.drawRect(-2,-2,$.width+4,$.width+4);
+    bg.graphics.endFill();*/
+    for(var index1=0;index1!=all_dis.length;++index1){
+        all_dis[index1].visible=false;
+    }
+    /*while(blockcanvas.numChildren>0){
+        blockcanvas.removeChildAt(0);
+    }*/
+    now_dis=0;
+    var sr=seerange[see_point];
+    for(var xindex=steve.x-sr;xindex!=steve.x+sr;++xindex){
+        for(var yindex=steve.y-sr;yindex!=steve.y+sr;++yindex){
+            for(var zindex=steve.z-sr;zindex!=steve.z+sr;++zindex){
+                if(can_be_see(xindex,yindex,zindex)){
+                    var stee_xyz=steve_see(xindex,yindex,zindex);
+                        if(stee_xyz[1]>=0){
+                        var points=[];
+                        points[0]=[steve_see(xindex-0.5,yindex-0.5,zindex+0.5),
+                                        steve_see(xindex+0.5,yindex-0.5,zindex+0.5),
+                                        steve_see(xindex-0.5,yindex-0.5,zindex-0.5)];/*F*/
+                        points[1]=[steve_see(xindex+0.5,yindex+0.5,zindex+0.5),
+                                        steve_see(xindex-0.5,yindex+0.5,zindex+0.5),
+                                        steve_see(xindex+0.5,yindex+0.5,zindex-0.5)];/*B*/
+                        points[2]=[steve_see(xindex-0.5,yindex+0.5,zindex+0.5),
+                                        steve_see(xindex-0.5,yindex-0.5,zindex+0.5),
+                                        steve_see(xindex-0.5,yindex+0.5,zindex-0.5)];/*L*/
+                        points[3]=[steve_see(xindex+0.5,yindex+0.5,zindex-0.5),
+                                        steve_see(xindex+0.5,yindex+0.5,zindex+0.5),
+                                        steve_see(xindex+0.5,yindex-0.5,zindex-0.5)];/*R*/
+                        points[4]=[steve_see(xindex-0.5,yindex+0.5,zindex+0.5),
+                                        steve_see(xindex+0.5,yindex+0.5,zindex+0.5),
+                                        steve_see(xindex-0.5,yindex-0.5,zindex+0.5)];/*U*/
+                        points[5]=[steve_see(xindex+0.5,yindex+0.5,zindex-0.5),
+                                        steve_see(xindex-0.5,yindex+0.5,zindex-0.5),
+                                        steve_see(xindex+0.5,yindex-0.5,zindex-0.5)];/*D*/
+                        if(getId(xindex,yindex-1,zindex)==block0){
+                            show_screen(points[0],getId(xindex,yindex,zindex));
+                        }
+                        if(getId(xindex,yindex+1,zindex)==block0){
+                            show_screen(points[1],getId(xindex,yindex,zindex));
+                        }
+                        if(getId(xindex-1,yindex,zindex)==block0){
+                            show_screen(points[2],getId(xindex,yindex,zindex));
+                        }
+                        if(getId(xindex+1,yindex,zindex)==block0){
+                            show_screen(points[3],getId(xindex,yindex,zindex));
+                        }
+                        if(getId(xindex,yindex,zindex-1)==block0){
+                            show_screen(points[5],getId(xindex,yindex,zindex));
+                        }
+                        if(getId(xindex,yindex,zindex+1)==block0){
+                            show_screen(points[4],getId(xindex,yindex,zindex));
+                        }
+                        }
+                }
+            }
+        }
+    }
+    sortChild(blockcanvas);
+}
+
+function display_blank(){
+    show_blank();
+}
+
+
+var log_can=true;
+
+/*
+*Log system
+*/
+
+/*var logcanvas=$.createCanvas({lifeTime:0,parent,canvas});*/
+/*log_canvas.transform.matrix3D=null;*/
+var log_all=[];
+function log_oldup(){
+for(var indexl=0;indexl!=log_all.length;++indexl)
+    log_all[indexl].y-=18;
+}
+
+function log(text){
+    if(log_can){
+    log_oldup();
+    var new_comment=$.createComment(text,{lifeTime:5.0,x:10,y:$.height-36,fontsize:18,color:0x7f7f7f,font:"system",
+                                            parent:logcanvas,motion:{alpha:{fromValue:1.0,toValue:0.0,lifeTime:1.5,startDelay:3500}}});
+    new_comment.filters=null;
+    new_comment.bold=false;
+    log_all[log_all.length]=new_comment;
+    }
+}
+
+function loadResourse_in(blockindex){
+    var _bmdblock=Bitmap.createBitmapData($.height,$.height,false,0xffffffff);
+    var _bmd=$G._get("bmd_"+blockindex);
+    for(var xindex=0;xindex!=16;++xindex){
+        for(var yindex=0;yindex!=16;++yindex){
+            var rect=Bitmap.createRectangle(yindex*$.height/16,xindex*$.height/16,$.height/16,$.height/16);
+            _bmdblock.fillRect(rect,0xff000000+_bmd[xindex*16+yindex]);
+        }
+    }
+    $G._set("bmd_block"+blockindex,_bmdblock);
+
+    var s_bmdblock=Bitmap.createBitmapData(32,32,false,0xffffffff);
+    var s_bmd=$G._get("bmd_"+blockindex);
+    for(var xindexs=0;xindexs!=16;++xindexs){
+        for(var yindexs=0;yindexs!=16;++yindexs){
+            var srect=Bitmap.createRectangle(2*yindexs,xindexs*2,2,2);
+            s_bmdblock.fillRect(srect,0xff000000+s_bmd[xindexs*16+yindexs]);
+        }
+    }
+    $G._set("bmd_blocks"+blockindex,s_bmdblock);
+}
+function loadBlock(){
+    log("方块材质加载中...");
+    for(var index=0;index!=blockbuild.length;++index)
+        loadResourse_in(blockbuild[index]);
+    log("材质加载完成");
+}
+function reloadBlock(){
+    log("屏幕大小改变，重置方块材质大小");
+    loadBlock();
+}
+
+
+/*
+*keyboard
+*/
+/*var building in mouse.ass*/
+var flying=true;
+var UP_d=38;var UP_u=381;
+var Down=40;
+var Left=37;var Right=39;var Wk=87;var Ak=65;var Sk=83;var Dk=68;
+var End=35;var Home=36;
+var keykeep=[];
+for(var indexk=0;indexk!=10;++indexk)keykeep[indexk]={key:0,time:0};
+function addkey(kkey,ktime){
+    for(var indexk1=0;indexk1!=9;++indexk1){
+        keykeep[indexk1]=keykeep[indexk1+1];
+    }
+    keykeep[9]={key:kkey,time:ktime};
+}
+function checkflying(){
+    if(keykeep[7].id==UP_d&&keykeep[8].id==UP_u&&keykeep[9].id==UP_d){
+        if((keykeep[9].time-keykeep[7].time)<=15)
+            {flying= !flying;trace("flying?");}
+    }
+}
+
+function keyDown(keyCode)
+{
+    trace("keydown");
+var feet=0.5;
+if(keyCode==35)/*End*/
+{
+    $G._set("MC_mousein",!$G._get("MC_mousein"));
+    Player.pause();
+    while(pausecanvas.numChildren>0){
+        pausecanvas.removeChildAt(0);
+    }
+    pausecanvas.visible=true;
+    var bg=$.createShape({parent:pausecanvas,lifeTime:0,alpha:0.5});
+    bg.graphics.beginFill(0x000000);
+    bg.graphics.drawRect(-2,-2,$.width+4,$.height+4);
+    bg.graphics.endFill();
+
+    var blocktext;
+     if(steve.blockhold==blocknormal)
+            blocktext="方块类型 : "+"普通人";
+    else if(steve.blockhold==blockbear)
+            blocktext="方块类型 : "+"熊孩子";
+    else if(steve.blockhold==blockbuild)
+            blocktext="方块类型 : "+"建筑党";
+    createMCButton($.width/2-200,$.height/2-8-40-16-40,400,40,blocktext,function(comment){
+                    if(steve.blockhold==blocknormal){
+                        comment.text="方块类型 : "+"建筑党";
+                        steve.blockhold=blockbuild;
+                        steve.in_hand=steve.blockhold.length-1;
+                        for(var indexb=0;indexb!=9;++indexb){
+                            var useblock=Math.random()*(steve.blockhold.length-1);
+                            steve.blank[indexb]=Math.round(useblock);
+                        }
+                   }
+                   else if(steve.blockhold==blockbear){
+                        comment.text="方块类型 : "+"普通人";
+                        steve.blockhold=blocknormal;
+                        steve.in_hand=steve.blockhold.length-1;
+                        for(var indexb=0;indexb!=9;++indexb){
+                            var useblock=Math.random()*(steve.blockhold.length-1);
+                            steve.blank[indexb]=Math.round(useblock);
+                        }
+                   }
+                   else if(steve.blockhold==blockbuild){
+                        comment.text="方块类型 : "+"熊孩子";
+                        steve.blockhold=blockbear;
+                        steve.in_hand=steve.blockhold.length-1;
+                        for(var indexb=0;indexb!=9;++indexb){
+                            var useblock=Math.random()*(steve.blockhold.length-1);
+                            steve.blank[indexb]=Math.round(useblock);
+                        }
+                   }
+    },pausecanvas);
+    var cursortext="鼠标灵敏度 : ";
+    if(cursor_point==0)
+        cursortext+="最高";
+    else if(cursor_point==1)
+        cursortext+="高";
+    else if(cursor_point==2)
+        cursortext+="中";
+    else if(cursor_point==3)
+        cursortext+="低";
+    else if(cursor_point==4)
+        cursortext+="最低";
+    createMCButton($.width/2-200,$.height/2-8-40,400,40,cursortext,function(comment){
+        if(cursor_point==0){
+            comment.text="鼠标灵敏度 : "+"最低";
+            cursor_point=4;
+        }
+        else if(cursor_point==1){
+            comment.text="鼠标灵敏度 : "+"最高";
+            cursor_point=0;
+        }
+        else if(cursor_point==2){
+            comment.text="鼠标灵敏度 : "+"高";
+            cursor_point=1;
+        }
+        else if(cursor_point==3){
+            comment.text="鼠标灵敏度 : "+"中";
+            cursor_point=2;
+        }
+        else if(cursor_point==4){
+            comment.text="鼠标灵敏度 : "+"低";
+            cursor_point=3;
+        }
+    },pausecanvas);
+    createMCButton($.width/2-200,$.height/2+8,400,40,"视野 : "+seerange[see_point],function(comment){
+                    see_point++;
+                    if(see_point>=seerange.length)see_point=0;
+                    comment.text="视野 : "+seerange[see_point];
+    },pausecanvas);
+    createMCButton($.width/2-200,$.height/2+8+40+16,400,40,"左下提醒 :"+(log_can?"是":"否"),function(comment){
+                    log_can=!log_can;
+                    comment.text="左下提醒 :"+(log_can?"是":"否");
+    },pausecanvas);
+    createMCButton($.width/2-200,$.height/2+8+40+16+40+32,400,40,"返回",function(){
+                    pausecanvas.visible=false;
+                    $G._set("MC_mousein",!$G._get("MC_mousein"));
+                    Player.play();
+    },pausecanvas);
+    return ;
+}
+if($G._get("MC_mousein"))
+{
+/*addkey(keyCode,$G._get("MC_time"));*/
+    log("按键");
+    if(keyCode==36 ){/*Home*/
+        building=!building;
+    }
+    else if( keyCode==38)/* UP */
+    {/*
+        checkflying();
+        if(flying==false){
+            if(existblock(steve.x,steve.y,steve.z-0.5-0.1))
+                interval(function()
+                 {
+                     if(!existblock(steve.x,steve.y,steve.z+1.0+0.5+0.1))
+                    steve.z+=0.1;
+                 },10,12);
+        }else {*/
+        if(!existblock(steve.x,steve.y,steve.z+1+0.5+0.1))
+            {steve.z+=1;display_block();}
+        /*}*/
+    }
+    else if(keyCode==40)/* Down */
+    {
+        if(!existblock(steve.x,steve.y,steve.z-0.5-0.1))
+            {steve.z-=1;display_block();}
+    }
+    else if(keyCode==37)/*Left*/
+    {
+        --steve.in_hand;
+        if(steve.in_hand<0)steve.in_hand=holdblock.length-1;
+        display_blank();
+    }
+    else if(keyCode==39)/*Right*/
+    {
+        ++steve.in_hand;
+        if(steve.in_hand>(holdblock.length-1))steve.in_hand=0;
+        display_blank();
+    }
+    else if(keyCode==96){/* 0 */
+        steve.select=!steve.select;
+        display_blank();
+    }
+    else if(keyCode>96&&keyCode<106){/* 1~9 */
+        if(steve.select==true)steve.blank[keyCode-96-1]=steve.in_hand;
+        else steve.blank_point=keyCode-96-1;
+        display_blank();
+    }
+else if(keyCode==87){/*W w*/
+    if(steve.see[0]>=0&&steve.see[0]<90){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x+=feet*Math.cos(angle);
+        steve.y+=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=90&&steve.see[1]<180){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y+=feet*Math.cos(angle);
+        steve.x-=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=180&&steve.see[1]<270){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x-=feet*Math.cos(angle);
+        steve.y-=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=270&&steve.see[1]<360){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y-=feet*Math.cos(angle);
+        steve.x+=feet*Math.sin(angle);display_block();}
+    }
+}
+else if(keyCode==83){/*S s*/
+    if(steve.see[0]>=0&&steve.see[0]<90){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x-=feet*Math.cos(angle);
+        steve.y-=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=90&&steve.see[1]<180){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y-=feet*Math.cos(angle);
+        steve.x+=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=180&&steve.see[1]<270){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x+=feet*Math.cos(angle);
+        steve.y+=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=270&&steve.see[1]<360){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y+=feet*Math.cos(angle);
+        steve.x-=feet*Math.sin(angle);display_block();}
+    }
+}
+else if(keyCode==65){/*A a*/
+    if(steve.see[0]>=0&&steve.see[0]<90){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y+=feet*Math.cos(angle);
+        steve.x-=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=90&&steve.see[1]<180){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x-=feet*Math.cos(angle);
+        steve.y-=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=180&&steve.see[1]<270){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y-=feet*Math.cos(angle);
+        steve.x+=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=270&&steve.see[1]<360){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x+=feet*Math.cos(angle);
+        steve.y+=feet*Math.sin(angle);display_block();}
+    }
+}
+else if(keyCode==68){/*D d*/
+    if(steve.see[0]>=0&&steve.see[0]<90){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y-=feet*Math.cos(angle);
+        steve.x+=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=90&&steve.see[1]<180){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x+=feet*Math.cos(angle);
+        steve.y+=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=180&&steve.see[1]<270){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y+=feet*Math.cos(angle);
+        steve.x-=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=270&&steve.see[1]<360){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x-=feet*Math.cos(angle);
+        steve.y-=feet*Math.sin(angle);display_block();}
+    }
+}
+
+}
+
+}
+
+function keyUp(keyCode)
+{
+
+if($G._get("MC_mousein")){
+    if(keyCode==38){
+            addkey(UP_u,$G._get("MC_time"));
+            return ;
+    }
+}
+
+}
+
+/*
+*Mouse
+*/
+
+
+function findfocus()
+{
+    if($G._get("MC_mousein"))
+    {
+            var zhigh=Math.sin(steve.see[1]/360.0*2*Math.PI);
+            var coordlong=Math.abs(Math.cos(steve.see[1]/360.0*2*Math.PI));
+            var angle=steve.see[0]%90.0/360.0*2.0*Math.PI;
+        for(var index=0.0;index<=5.0;index+=0.1)
+        {
+            var height=index*zhigh;
+            var lengthco=index*coordlong;
+            var cosone=lengthco*Math.cos(angle);
+            var sinone=lengthco*Math.sin(angle);
+            if(steve.see[0]>=0&&steve.see[0]<90)
+            {
+                if(existblock(steve.x+cosone,steve.y+sinone,steve.z+1+height))
+                {
+                    return [steve.x+cosone,steve.y+sinone,steve.z+1+height];
+                }
+            }
+            else if(steve.see[0]>=90&&steve.see[0]<180)
+            {
+                if(existblock(steve.x-sinone,steve.y+cosone,steve.z+1+height))
+                {
+                    return [steve.x-sinone,steve.y+cosone,steve.z+1+height];
+                }
+            }
+            else if(steve.see[0]>=180&&steve.see[0]<270)
+            {
+                if(existblock(steve.x-cosone,steve.y-sinone,steve.z+1+height))
+                {
+                    return [steve.x-cosone,steve.y-sinone,steve.z+1+height];
+                }
+            }
+            else if(steve.see[0]>=270&&steve.see[0]<360)
+            {
+                if(existblock(steve.x+sinone,steve.y-cosone,steve.z+1+height))
+                {
+                    return [steve.x+sinone,steve.y-cosone,steve.z+1+height];
+                }
+            }
+        }
+    }
+    return [];
+}
+
+var movetimes=0;
+function mouseMove(event)
+{
+++movetimes;
+if(movetimes>=cursor[cursor_point]){
+        movetimes=0;
+    if($G._get("MC_mousein"))
+    {
+    log("视线移动");
+    steve.see[0]=-(event.localX-$.width/2+0.1)/($.width/2)*180.0;
+    if(steve.see[0]<0)steve.see[0]+=360.0;
+    steve.see[1]=-(event.localY-$.height/2+0.1)/($.height/2)*90.0;
+    display_block();
+    }
+}
+}
+
+var building=false;
+
+function mouseClick(event)
+{trace("click");
+if(!building){
+    if($G._get("MC_mousein"))
+    {
+    var focused=findfocus();
+    trace(focused[0]+" "+focused[1]+" "+focused[2]);
+        if(focused[0]!=undefined)
+        {log("方块破坏");
+        destroyBlock(focused[0],focused[1],focused[2]);
+        display_block();
+        }
+    }
+}/*
+}
+
+function mouseRightClick(event)
+{*/else{
+    if($G._get("MC_mousein"))
+    {
+    var focused=findfocus();
+    if(focused[0]!=undefined)
+    {   log("方块建造");
+        focused=ceilxyz(focused[0],focused[1],focused[2]);
+        var udlrfb=[false,false,false,false,false,false];
+        udlrfb[ ( steve.x> (focused[0]+0.5) ) ? 3: ( (steve.x<(focused[0]-0.5))?2:7)]=true;
+        udlrfb[ ( steve.y> (focused[1]+0.5) ) ? 5: ( (steve.y<(focused[1]-0.5))?4:7)]=true;
+        udlrfb[ ((steve.z+1)>(focused[2]+0.5))?0:( ( (steve.z+1)<(focused[2]-0.5) )?1:7)]=true;
+        trace(udlrfb[0],udlrfb[1],udlrfb[2],udlrfb[3],udlrfb[4],udlrfb[5]);
+        if(udlrfb[0]==true||udlrfb[1]==true){
+                var range;
+                if(udlrfb[0]==true)range=(steve.z+1.0-(focused[2]+0.5));
+                else range=(focused[2]-0.5-(steve.z+1.0));
+                var xylong=range / (Math.tan(Math.abs(steve.see[1])/360.0*2.0*Math.PI));
+                var angle=steve.see[0]%90.0/360.0*2.0*Math.PI;
+                trace(range,xylong,angle);
+                if(steve.see[0]>=0&&steve.see[0]<90){
+                    if( (xylong*Math.cos(angle)+steve.x)<(focused[0]+0.5)
+                    &&(xylong*Math.cos(angle)+steve.x)>(focused[0]-0.5)
+                    && (xylong*Math.sin(angle)+steve.y)>(focused[1]-0.5)
+                    &&(xylong*Math.sin(angle)+steve.y)<(focused[1]+0.5) ){
+                        steve.putblock(focused[0],focused[1],focused[2]+((udlrfb[0]==true)?1:-1));
+                        display_block();
+                        return ;
+                    }
+                }
+                else if(steve.see[0]>=90&&steve.see[0]<180){
+                    if( (xylong*Math.cos(angle)+steve.y)<(focused[1]+0.5)
+                    &&(xylong*Math.cos(angle)+steve.y)>(focused[1]-0.5)
+                    && ( -xylong*Math.sin(angle)+steve.x)>(focused[0]-0.5)
+                    &&( -xylong*Math.sin(angle)+steve.x)<(focused[0]+0.5) ){
+                        steve.putblock(focused[0],focused[1],focused[2]+((udlrfb[0]==true)?1:-1));
+                        display_block();
+                        return ;
+                    }
+                }
+                else if(steve.see[0]>=180&&steve.see[0]<270){
+                    if( (-xylong*Math.cos(angle)+steve.x)<(focused[0]+0.5)
+                    &&(-xylong*Math.cos(angle)+steve.x)>(focused[0]-0.5)
+                    && (-xylong*Math.sin(angle)+steve.y)>(focused[1]-0.5)
+                    &&(-xylong*Math.sin(angle)+steve.y)<(focused[1]+0.5) ){
+                       steve.putblock(focused[0],focused[1],focused[2]+((udlrfb[0]==true)?1:-1));
+                       display_block();
+                        return ;
+                    }
+                }
+                else if(steve.see[0]>=270&&steve.see[0]<360)
+                {
+                    if( (-xylong*Math.cos(angle)+steve.y)<(focused[1]+0.5)
+                    &&(-xylong*Math.cos(angle)+steve.y)>(focused[1]-0.5)
+                    && ( xylong*Math.sin(angle)+steve.x)>(focused[0]-0.5)
+                    &&( xylong*Math.sin(angle)+steve.x)<(focused[0]+0.5) ){
+                        steve.putblock(focused[0],focused[1],focused[2]+((udlrfb[0]==true)?1:-1));
+                        display_block();
+                        return ;
+                    }
+                }
+        }
+        if(udlrfb[2]==true||udlrfb[3]==true){
+            if(steve.see[0]>=0&&steve.see[0]<90 ){
+            var range=focused[0]-0.5-steve.x;
+            var angle=steve.see[0]%90.0/360.0*2.0*Math.PI;
+                if( (range*Math.tan(angle)+steve.y)< (focused[1]+0.5)
+                &&(range*Math.tan(angle)+steve.y)> (focused[1]-0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )<(focused[2]+0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )>(focused[2]-0.5) ){
+                    steve.putblock(focused[0]-1,focused[1],focused[2]);
+                    display_block();
+                    return ;
+                }
+            }
+            else if(steve.see[0]>=270&&steve.see[0]<360){
+            var range=focused[0]-0.5-steve.x;
+            var angle=(90.0-steve.see[0]%90.0)/360.0*2.0*Math.PI;
+                if( (-range*Math.tan(angle)+steve.y)< (focused[1]+0.5)
+                &&(-range*Math.tan(angle)+steve.y)> (focused[1]-0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )<(focused[2]+0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )>(focused[2]-0.5) ){
+                    steve.putblock(focused[0]-1,focused[1],focused[2]);
+                    display_block();
+                    return ;
+                }
+            }
+            else if(steve.see[0]>=90&&steve.see[0]<180){
+            var range=steve.x-(focused[0]+0.5);
+            var angle=(90.0-steve.see[0]%90.0)/360.0*2.0*Math.PI;
+                if( (range*Math.tan(angle)+steve.y)< (focused[1]+0.5)
+                &&(range*Math.tan(angle)+steve.y)> (focused[1]-0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )<(focused[2]+0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )>(focused[2]-0.5) ){
+                    steve.putblock(focused[0]+1,focused[1],focused[2]);
+                    display_block();
+                    return ;
+                }
+            }
+            else if(steve.see[0]>=180&&steve.see[0]<270){
+            var range=steve.x-(focused[0]+0.5);
+            var angle=steve.see[0]%90.0/360.0*2.0*Math.PI;
+                if( (-range*Math.tan(angle)+steve.y)< (focused[1]+0.5)
+                &&(-range*Math.tan(angle)+steve.y)> (focused[1]-0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )<(focused[2]+0.5)
+                &&( range/(Math.cos(angle))*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0 )>(focused[2]-0.5) ){
+                    steve.putblock(focused[0]+1,focused[1],focused[2]);
+                    display_block();
+                    return ;
+                }
+            }
+        }
+        if(udlrfb[4]==true||udlrfb[5]==true){
+            if(steve.see[0]>=0&&steve.see[0]<90){
+                var range=focused[1]-0.5-steve.y;
+                var angle=steve.see[0]%90.0/360.0*2.0*Math.PI;
+                if( (range/Math.tan(angle)+steve.x) > (focused[0]-0.5)
+                &&(range/Math.tan(angle)+steve.x) < (focused[0]+0.5)
+                &&((range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)<(focused[2]+0.5))
+                &&((range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)>(focused[2]-0.5))){
+                    steve.putblock(focused[0],focused[1]-1,focused[2]);
+                    display_block();
+                    return ;
+                }
+            }
+            else if(steve.see[0]>=90&&steve.see[0]<180){
+                var range=focused[1]-0.5-steve.y;
+                var angle=(90.0-steve.see[0]%90.0)/360.0*2.0*Math.PI;
+                if( (-range/Math.tan(angle)+steve.x) > (focused[0]-0.5)
+                &&(-range/Math.tan(angle)+steve.x) < (focused[0]+0.5)
+                &&((range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)<(focused[2]+0.5))
+                &&((range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)>(focused[2]-0.5))){
+                    steve.putblock(focused[0],focused[1]-1,focused[2]);
+                    display_block();
+                    return ;
+                }
+            }
+            else if(steve.see[0]>=180&&steve.see[0]<270){
+                var range=steve.y-(focused[1]+0.5);
+                var angle=steve.see[0]%90.0/360.0*2.0*Math.PI;
+                if( (-range/Math.tan(angle)+steve.x) > (focused[0]-0.5)
+                &&(-range/Math.tan(angle)+steve.x) < (focused[0]+0.5)
+                &&(range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)>(focused[2]-0.5)
+                &&(range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)<(focused[2]+0.5) ){
+                    steve.putblock(focused[0],focused[1]+1,focused[2]);
+                    display_block();
+                    return ;
+                }
+            }
+            else if(steve.see[0]>=270&&steve.see[0]<360){
+                var range=steve.y-(focused[1]+0.5);
+                var angle=(90.0-steve.see[0]%90.0)/360.0*2.0*Math.PI;
+                if( (range/Math.tan(angle)+steve.x) > (focused[0]-0.5)
+                &&(range/Math.tan(angle)+steve.x) < (focused[0]+0.5)
+                &&(range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)>(focused[2]-0.5)
+                &&(range/Math.sin(angle)*Math.tan(steve.see[1]/360.0*2.0*Math.PI)+steve.z+1.0)<(focused[2]+0.5) ){
+                    steve.putblock(focused[0],focused[1]+1,focused[2]);
+                    display_block();
+                    return ;
+                }
+            }
+        }
+    }
+    }
+}
+}
+
+var olddanmu=0;
+for(var danmuindex=0;danmuindex!=Player.commentList.length;++danmuindex){
+    if(Player.commentList[danmuindex].danmuId>olddanmu&&Player.commentList[danmuindex].mode!=8)
+        olddanmu=Player.commentList[danmuindex].danmuId;
+}
+function zhibo(){
+    var display_danmu=[];
+    for(var index1=0;index1!=Player.commentList.length;++index1){
+        if(Player.commentList[index1].danmuId>olddanmu&&Player.commentList[index1].mode!=8){
+            display_danmu[display_danmu.length]={id:Player.commentList[index1].danmuId,text:Player.commentList[index1].text,
+                                                                                color:Player.commentList[index1].color};
+        }
+    }
+    for(var index2=0;index2!=display_danmu.length;++index2){
+    if(display_danmu[index2].id>olddanmu)
+        olddanmu=display_danmu[index2].id;
+    }
+    for(var index3=0;index3!=display_danmu.length;++index3)
+        display_zhibo(display_danmu[index3]);
+}
+function display_zhibo(comment){
+    var space=[];
+    space.length=$.height-2-2/20;
+    for(var index1=0;index1!=space.length;++index1)
+        space[index1]=true;
+    for(var child1=0;child1!=danmucanvas.numChildren;++child1){
+        var childtemp=danmucanvas.getChildAt(child1);
+        if(childtemp.x<$.width&&childtemp.x+childtemp.textWidth>$.height){
+            space[(childtemp.y-2)/20]=false;
+        }
+    }
+    var _comment_y=-1;
+    for(var index2=0;index2!=space.length;++index2){
+        if(space[index2]==true){
+        _comment_y=index2*20+2;
+        break;}
+    }
+    if(_comment_y==-1)
+        _comment_y=0;
+    var tempcomment=$.createComment(comment.text,{parent:danmucanvas,x:$.width+4,y:_comment_y,lifeTime:4.0,fontsize:20});
+    var realcomment=$.createComment(comment.text,{parent:danmucanvas,x:$.width+4,y:_comment_y,lifeTime:4.0,fontsize:20,color:comment.color,
+                                    motion:{x:{fromValue:$.width+4,toValue:0-tempcomment.textWidth,lifeTime:4.0}} });
+    tempcomment.visible=false;
+}
+$.root.addEventListener("enterFrame",zhibo);
+$.root.addEventListener("added",function(e){
+if(e.target.constructor=="[class ScrollComment]"){
+        e.target.alpha=0.0;
+    }
+});
+/*
+*BGM control
+*/
+var _starttime=10.0*1000;
+var _endtime=19.0*60.0*1000;
+function bgmcontrol(){
+    interval(function(){
+                if(Player.time>_endtime-1000)
+                    Player.seek(_starttime);
+    },100,0);
+}
+bgmcontrol();
+
+/*
+*MC button interface
+*/
+
+function createMCButton(_x,_y,_width,_height,_text,_onclick,_canvas){
+    var _bmd=Bitmap.createBitmapData(_width,_height,false,0xff6f6f6f);
+    var _rect1=Bitmap.createRectangle(0,0,_width,2);
+    _bmd.fillRect(_rect1,0xff000000);
+    var _rect2=Bitmap.createRectangle(0,0,2,_height);
+    _bmd.fillRect(_rect2,0xff000000);
+    var _rect3=Bitmap.createRectangle(0,_height-2,_width,2);
+    _bmd.fillRect(_rect3,0xff000000);
+    var _rect4=Bitmap.createRectangle(_width-2,0,2,$.height);
+    _bmd.fillRect(_rect4,0xff000000);
+    var _rect5=Bitmap.createRectangle(2,2,_width-2-2,2);
+    _bmd.fillRect(_rect5,0xffaaaaaa);
+    var _rect6=Bitmap.createRectangle(2,2,2,_height-2-4);
+    _bmd.fillRect(_rect6,0xffaaaaaa);
+    var _rect7=Bitmap.createRectangle(2,_height-6,_width-6,4);
+    _bmd.fillRect(_rect7,0x565656);
+    var _rect8=Bitmap.createRectangle(_width-4,4,2,_height-6);
+    _bmd.fillRect(_rect8,0x565656);
+    var _rect9=Bitmap.createRectangle(2,_height-6,2,4);
+    _bmd.fillRect(_rect9,0x6d6d6d);
+    var _rect10=Bitmap.createRectangle(_width-4,2,2,2);
+    _bmd.fillRect(_rect10,0x6d6d6d);
+    var _bitmap=Bitmap.createBitmap({bitmapData:_bmd,lifeTime:0});
+    _bitmap.setParent(_canvas);
+    _bitmap.x=_x;
+    _bitmap.y=_y;
+    var _textFShadow=$.createComment(_text,{lifeTime:0,font:"system",color:0x000000,parent:_canvas});
+    _textFShadow.transform.matrix3D=null;
+    _textFShadow.filters=null;
+    _textFShadow.x=_x+_width/2-_textFShadow.textWidth/2;
+    _textFShadow.y=_y+_height/2-_textFShadow.textHeight/2;
+    var _textF=$.createComment(_text,{lifeTime:0,font:"system",color:0xffffff,parent:_canvas});
+    _textF.transform.matrix3D=null;
+    _textF.filters=null;
+    _textF.x=_x+_width/2-_textF.textWidth/2-2;
+    _textF.y=_y+_height/2-_textF.textHeight/2-2;
+    var _buttonF=$.createButton({lifeTime:0,width:_width,height:_height,alpha:0.0,onclick:function(){_onclick(_textF);},text:"",parent:_canvas});
+    _buttonF.transform.matrix3D=null;
+    _buttonF.x=_x;
+    _buttonF.y=_y;
+}
+
+function option(){
+    log("选项启动");
+    maincanvas.visible=false;
+    while(optioncanvas.numChildren>0)
+        optioncanvas.removeChildAt(0);
+    optioncanvas.visible=true;
+    var _bgarray=$G._get("opbg");
+    var _bgdata=Bitmap.createBitmapData(64,64,false,0xfafafa);
+    for(var index1=0;index1!=16;index1++){
+        for(var index2=0;index2!=16;++index2){
+            _bgdata.fillRect(Bitmap.createRectangle(index2*4,index1*4,4,4),_bgarray[index1*16+index2]+0xff000000);
+        }
+    }
+    for(var index3=0;index3!=1024/64;++index3){
+        for(var index4=0;index4!=2048/64;++index4){
+            var _bitmap=Bitmap.createBitmap({bitmapData:_bgdata,smoothing:false,lifeTime:0});
+            _bitmap.transform.matrix3D=null;
+            _bitmap.setParent(optioncanvas);
+            _bitmap.x=index4*64;
+            _bitmap.y=index3*64;
+        }
+    }
+    var blocktext;
+     if(holdblock==blocknormal)
+            blocktext="方块类型 : "+"普通人";
+    else if(holdblock==blockbear)
+            blocktext="方块类型 : "+"熊孩子";
+    else if(holdblock==blockbuild)
+            blocktext="方块类型 : "+"建筑党";
+    createMCButton($.width/2-200,$.height/2-8-40-16-40,400,40,blocktext,function(comment){
+                    if(holdblock==blocknormal){
+                        comment.text="方块类型 : "+"建筑党";
+                        holdblock=blockbuild;
+                   }
+                   else if(holdblock==blockbear){
+                        comment.text="方块类型 : "+"普通人";
+                        holdblock=blocknormal;
+                   }
+                   else if(holdblock==blockbuild){
+                        comment.text="方块类型 : "+"熊孩子";
+                        holdblock=blockbear;
+                   }
+    },optioncanvas);
+    var cursortext="鼠标灵敏度 : ";
+    if(cursor_point==0)
+        cursortext+="最高";
+    else if(cursor_point==1)
+        cursortext+="高";
+    else if(cursor_point==2)
+        cursortext+="中";
+    else if(cursor_point==3)
+        cursortext+="低";
+    else if(cursor_point==4)
+        cursortext+="最低";
+    createMCButton($.width/2-200,$.height/2-8-40,400,40,cursortext,function(comment){
+        if(cursor_point==0){
+            comment.text="鼠标灵敏度 : "+"最低";
+            cursor_point=4;
+        }
+        else if(cursor_point==1){
+            comment.text="鼠标灵敏度 : "+"最高";
+            cursor_point=0;
+        }
+        else if(cursor_point==2){
+            comment.text="鼠标灵敏度 : "+"高";
+            cursor_point=1;
+        }
+        else if(cursor_point==3){
+            comment.text="鼠标灵敏度 : "+"中";
+            cursor_point=2;
+        }
+        else if(cursor_point==4){
+            comment.text="鼠标灵敏度 : "+"低";
+            cursor_point=3;
+        }
+    },optioncanvas);
+    createMCButton($.width/2-200,$.height/2+8,400,40,"视野 : "+seerange[see_point],function(comment){
+                    see_point++;
+                    if(see_point>=seerange.length)see_point=0;
+                    comment.text="视野 : "+seerange[see_point];
+    },optioncanvas);
+    createMCButton($.width/2-200,$.height/2+8+40+16,400,40,"左下提醒 :"+(log_can?"是":"否"),function(comment){
+                    log_can=!log_can;
+                    comment.text="左下提醒 :"+(log_can?"是":"否");
+    },optioncanvas);
+    createMCButton($.width/2-200,$.height/2+8+40+16+40+32,400,40,"返回",function(){
+                    optioncanvas.visible=false;
+                    maincanvas.visible=true;
+    },optioncanvas);
+}
+
+function ceilxyz(cx,cy,cz)
+{
+    var func=function(num)
+    {
+        var mininum=Math.floor(num);
+        var maxinum=Math.ceil(num);
+        if(num<(mininum+0.5))
+            return mininum;
+        else return maxinum;
+    };
+    return [func(cx),func(cy),func(cz)];
+}
+
+function existblock(ex,ey,ez)
+{
+    var arxyz=ceilxyz(ex,ey,ez);
+    ex=arxyz[0];ey=arxyz[1];ez=arxyz[2];
+    if(worldbase[ez]==block0)
+    {
+        for(var ei=0;ei!=worldextra.length;++ei)
+        {
+            if(worldextra[ei].x==ex&&worldextra[ei].y==ey&&worldextra[ei].z==ez)
+            {
+                if(worldextra[ei].id!=block0)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    else
+    {
+        for(var ei=0;ei!=worldextra.length;++ei)
+        {
+            if(worldextra[ei].x==ex&&worldextra[ei].y==ey&&worldextra[ei].z==ez)
+            {
+                if(worldextra[ei].id==block0)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
+
+function addBlock(ax,ay,az,aid)
+{
+    var arxyz=ceilxyz(ax,ay,az);
+    ax=arxyz[0];ay=arxyz[1];az=arxyz[2];
+    var newblock={
+    x:ax,
+    y:ay,
+    z:az,
+    id:aid
+    };
+    worldextra[worldextra.length]=newblock;
+}
+
+function destroyBlock(dx,dy,dz)
+{
+    var arxyz=ceilxyz(dx,dy,dz);
+    dx=arxyz[0];dy=arxyz[1];dz=arxyz[2];
+    var nullblock={
+        x:dx,
+        y:dy,
+        z:dz,
+        id:block0};
+    for(var indexd=0;indexd!=worldextra.length;++indexd)
+    {
+        if(worldextra[indexd].x==dx&&worldextra[indexd].y==dy&&worldextra[indexd].z==dz)
+        {
+            worldextra[indexd]=nullblock;
+            return ;
+        }
+    }
+    worldextra[worldextra.length]=nullblock;
+}
+
+function getId(x,y,z){
+     var arxyz=ceilxyz(x,y,z);
+     ax=arxyz[0];ay=arxyz[1];az=arxyz[2];
+    for(var indexa=0;indexa!=worldextra.length;++indexa){
+        if(((worldextra[indexa]).x==ax&&(worldextra[indexa]).y==ay)&&(worldextra[indexa]).z==az){
+            return (worldextra[indexa]).id;
+        }
+    }
+    return worldbase[az];
+}
+
+
+function worldmore()
+{
+    var tree=function(){};
+    var mountain=function(){
+        trace("mountain start");
+        var fillblock=function(x1,y1,x2,y2,z,id){
+            var minx=Math.min(x1,x2);var maxx=Math.max(x1,x2);
+            var miny=Math.min(y1,y2);var maxy=Math.max(y1,y2);
+            while(minx<=maxx){
+                while(miny<=maxy){
+                    addBlock(minx,miny,z,id);
+                    ++miny;
+                }
+                ++minx;
+            }
+        };trace("end");/*
+        var index1=Math.round(Math.random()*20);
+        trace(index1);
+        var moun=[];
+        for(var index2=0;index2!=index1;++index2){
+            moun[index2]=[Math.random()*WorldX,Math.random()*WorldY];
+            trace(moun[index2][0]+" "+moun[index2][1]);
+            for(var index3=0;index3<=Math.random()*32;++index3)
+                fillblock(moun[index2][0]-Math.random()*(50-index3*Math.random()*5),moun[index2][1]-Math.random()*(50-index3*Math.random()*5),
+                            moun[index2][0]+Math.random()*(50-index3*Math.random()*5),moun[index2][1]+Math.random()*(50-index3*Math.random()*5),landline+index3,block2);
+        }*/
+    };
+    var mine=function(){
+        var num_dia=Math.random()*50;
+        while(num_dia>0){
+            addBlock(Math.random()*worldX,Math.random()*worldY,1+Math.random()*15,block56);
+            --num_dia;
+        }
+        trace("1.3.2.1");
+        var num_iron=200+Math.random()*100;
+        while(num_iron>0){
+            addBlock(Math.random()*worldX,Math.random()*worldY,1+Math.random()*landline,block15);
+            --num_iron;
+        }
+        trace("1.3.2.2");
+        var num_au=100*Math.random()*50;
+        while(num_au>0){
+            addBlock(Math.random()*worldX,Math.random()*worldY,1+Math.random()*(landline-16),block14);
+            --num_au;
+        }
+        trace("1.3.2.3");
+        var num_coal=500*Math.random()*250;
+        while(num_coal>0){
+            addBlock(Math.random()*worldX,Math.random()*worldY,1+Math.random()*(landline-16),block16);
+            --num_coal;
+        }
+        trace("1.3.2.4");
+    };
+    trace("1.3.1");
+    /*mountain();*/
+    trace("1.3.2");
+    mine();
+    trace("1.3.3");
+    /*tree();*/
+    /* Will be more;*/
+}
+
+function createWorld(sizeX,sizeY,sizeZ)
+{
+    log("创造世界中...");
+    var x=0,y=0,z=0;
+    worldX=sizeX;
+    worldY=sizeY;
+    worldZ=sizeZ;
+    trace(1.1);
+    /*
+    for(var indexx=0;indexx!=sizeX;++indexx)
+    {
+        for(var indexy=0;indexy!=sizeY;++indexy)
+        {
+            for(var indexz=0;indexz!=sizeZ;++indexz)
+                world[indexx*indexy*indexz]=0;
+        }
+    }
+*/
+    /*create fact block*/
+/*    for(var index1=0;index1!=sizeX;++index1)
+    {
+        for(var index2=0;index2!=sizeY;++index2)
+        {
+            world[x*sizeY*sizeZ+y*sizeZ+0]=7;
+            world[x*sizeY*sizeZ+y*sizeZ+1]=1;
+            world[x*sizeY*sizeZ+y*sizeZ+2]=1;
+            world[x*sizeY*sizeZ+y*sizeZ+3]=2;
+            ++y;
+        }
+        ++x;
+        y=0;
+    }
+    x=0;*/
+    log("创造基础世界...");
+    trace(1.2);
+    worldbase[0]=block7;
+    for(var indexa=0;indexa!=landline-3;++indexa)
+        worldbase[indexa]=block1;
+    for(var indexb=landline-3;indexb!=landline-1;++indexb)
+        worldbase[indexb]=block3;
+    worldbase[landline-1]=block2;
+    for(var indexc=landline;indexc!=sizeZ;++indexc)
+        worldbase[indexc]=block0;
+    for(var indexd=-1;indexd!=-landline;--indexd)
+        worldbase[indexd]=block0;
+    log("世界进行扩展...");
+    trace(1.3);
+    /*worldmore();*/
+    log("世界创造完成");
+    trace(1.4);
+    Global._set("MC_state","playing");
+    Global._set("MC_mousein",true);
+}
+
+
+/* Designing
+function idcanbeputinground(id)
+{
+    if(id==unknownnow)
+        return false;
+    else return true;
+}
+*/
+function createSteve()
+{
+    log("创造人物中...");
+    steve.x+=(-0.1+worldX/2);
+    steve.y+=(-0.1+worldY/2);
+    steve.z+=(-0.1+landline);
+    log("位置设置完成");
+    steve.health=20;
+    steve.hunger=20;
+    steve.equipment=0;
+    steve.blockhold=holdblock;
+    steve.in_hand=steve.blockhold.length-1;
+    steve.blank=[];
+    steve.blank.length=9;
+    for(var indexb=0;indexb!=9;++indexb){
+    var useblock=Math.random()*(steve.blockhold.length-1);
+    steve.blank[indexb]=Math.round(useblock);
+    }
+    steve.select=true;
+    steve.blank_point=0;
+    steve.see=[0.0,0.0];
+    steve.putblock=function(x,y,z)
+    {
+            trace("putblock",x,y,z,steve.blockhold[steve.in_hand]);
+            if(steve.select==true)
+            addBlock(x,y,z,steve.blockhold[steve.in_hand]);
+            else{var selected=steve.blank[steve.blank_point];
+            addBlock(x,y,z,steve.blockhold[selected]);}
+            return ;
+    };
+    steve.getblock=function(id)
+    {
+/*        var findsameblock=function(id)
+        {
+            for(var index=0;index!=steve.object_blank.size;++index){
+                if(steve.object_blank.things[index].id==id)
+                    return {num:index,place:'blank'};
+            }
+            for(var index2=0;index2!=steve.backpack.size;++index2){
+                if(steve.backpack.things[index2].id==id)
+                    return {num:index2,place:'back'};
+            }
+            return {place:'null'};
+        }
+        var finded=findsameblock(id)
+        if( finded.place!='null' )
+            finded.place=='blank'? steve.object_blank.things[finded.num].num++:
+                                                   steve.backpack.things[finded.num].num++;
+        else {
+            finded=findsameblock(block0);
+            if( finded.place!='null' )
+            finded.place=='blank'? (steve.object_blank.things[finded.num].num=1,steve.object_blank.things[finded.num].id=id):
+                                                   (steve.backpack.things[finded.num].num=1,steve.backpack.things[finded.num].id=id);
+        }*/
+    };log("人物属性设置完成");
+    Global._set("MC_steve",steve);
+    log("人物创造完成");
+}
+/*
+function createFallLinklist()
+{
+    var start={};
+    start.used=1;
+    start.next={};
+    return start;
+}
+
+var fall=
+{
+    fall_things:{},
+    init:function()
+    {
+        fall_things=createFallLinklist();
+    }
+    append:function(id,x,y,z)
+    {
+        var temp=createFallLinklist();
+        temp.id=id;
+        temp.x=x;
+        temp.y=y;
+        temp.z=z;
+        temp.num=1;
+        if(typeof(fall_things.next.used)=="undefined")
+        {
+            fall_things.next=temp;
+        }
+        else
+        {
+            var fanext=fall_things.next;
+            while(typeof(fanext.next.used)!="undefined")
+            {
+            var fanext=fanext.next;
+            }
+            fanext.next=temp;
+        }
+    },
+    find:function(id,x,y,z)
+    {
+        for(var ffi=0;ffi!=numbers;++ffi)
+        {
+
+        }
+    },
+    find_empty:function()
+    {
+
+    },
+    erase:function(id,x,y,z)
+    {
+
+        --numbers;
+    }
+};
+*/
+var falling=false;
+var falltime=0;
+var nexthigh=0.1;
+var fallall=0;
+var p_g=0.2; /* m/s^2 */
+var p_v=0;   /* m/s */
+
+function gravity(){
+    log("重力引擎启动");
+    interval(function(){
+             if(!existblock(steve.x,steve.y,steve.z-0.5-nexthigh)){
+                if(falling==true){
+                    /*var fallhigh=0.1*(falltime+1)*(falltime+1);
+                    steve.z-=nexthigh;fallall+=nexthigh;
+                    nexthigh=fallhigh-fallall;
+                    if(nexthigh>0.9)
+                    ++falltime;
+                    if(existblock(steve.x,steve.y,steve.z-0.5-nexthigh))
+                    {
+
+                    }*/
+                    p_v=p_g*falltime;
+                    if(falltime>5){
+                        p_v=1.0;
+                        fallall+=1.0;
+                        steve.z-=1.0;
+                        nextfall=1.0;
+                    }else{
+                        fallall+=0.5*(p_v+p_g*(falltime-1))*1.0;
+                        steve.z-=0.5*(p_v+p_g*(falltime-1))*1.0;
+                        nextfall=0.5*(p_v+p_g*(falltime+1))*1.0;
+                    }
+                    ++falltime;
+                    if(existblock(steve.x,steve.y,steve.z-0.5-nexthigh)){
+                        timer(function(){while(!existblock(steve.x,steve.y,steve.z-0.5-0.1))steve.z-=0.1;},75);
+                        falling=false;
+                        nexthigh=0.1;fallall=0;falltime=0;
+                    }
+                }
+                else{
+                    falltime=1;
+                    falling=true;
+                }
+             }
+             },100,0);
+}
+
+var time=0;
+
+function timeloop()
+{   log("时间引擎启动");
+    interval(function()
+             {
+                 ++time;
+                 Global._set("MC_time",time);
+             },100,0);
+}
+var nowheight=$.height;
+function texture(){
+    loadBlock();
+    interval(function(){
+                if($.height==nowheight)
+                    return;
+                else {reloadBlock();nowheight=$.height;display_block();display_blank();}
+    },100,0);
+}
+
+function background(){
+    var _bg=$.createShape({lifeTime:0,parent:backgroundcanvas});
+}
+
+function gamestart(){
+maincanvas.visible=false;
+optioncanvas.visible=false;
+Player.seek(10*1000);
+Player.play();
+trace(1);
+createWorld(512,512,128);
+trace(2);
+createSteve();
+texture();
+trace(3);
+//Player.keyTrigger(keyDown,0xffffff);
+trace(4);
+//Player.keyTrigger(keyUp,0xffffff,true);
+trace(5);
+log("键盘就位");
+$.root.mouseEnabled=true;
+var background=$.createShape({lifeTime:0,alpha:0.0});
+background.graphics.beginFill(0xfafafa);
+background.graphics.drawRect(-2,-2,$.width+4,$.height+4);
+background.graphics.endFill();
+//$.root.addEventListener("mouseDown",mouseClick);
+//$.root.addEventListener("mouseMove",mouseMove);
+trace(6);
+log("鼠标就位");
+timeloop();
+//gravity();
+log("显示方块中...");
+initdis();
+display_block();
+log("显示方块完成");
+log("显示用户UI中...");
+display_blank();
+log("显示用户UI完成");
+interval(function(){
+steve.see[0]-=36.0;
+if(steve.see[0]<0)steve.see[0]+=360.0;
+display_block();
+},12450/10,0);
+}
+
+function test(){
+    /*steve.x=90;steve.y=90;steve.z=50;
+    steve.see=[90.0,0.0];
+    $G._set("MC_mousein",true);
+    for(var index1=0;index1!=50;++index1)
+        worldbase[index1]=block14;
+    for(var index2=50;index2!=100;++index2)
+        worldbase[index2]=block0;
+    var ss=steve_see(90,100,50);
+    trace(ss[0],ss[1],ss[2]);*/
+    var bf=blockface([100.0,100.0,100.0],[110.0,110.0,110.0],[90.0,110.0,110.0]);
+    trace(bf[0],bf[1],bf[2]);
+}
+
+function startUI(){
+    while(maincanvas.numChildren>0){
+        maincanvas.removeChildAt(0);
+    }
+    log("加载开始界面中");
+    var _bgarray=$G._get("bg1");var _bgdata=Bitmap.createBitmapData(256,256,false,0xfafafa);
+    for(var index1=0;index1!=256;++index1){
+        for(var index2=0;index2!=256;++index2){
+            _bgdata.setPixel(index2,index1,_bgarray[index1*256+index2]);
+        }
+    }
+    var _bgbmp=Bitmap.createBitmap({bitmapData:_bgdata,smoothing:true,scale:5.0,lifeTime:0});
+    _bgbmp.setParent(maincanvas);
+    _bgbmp.x=0-Math.round(Math.random()*300+100);
+    _bgbmp.y=0-Math.round(Math.random()*300+100);
+    /*var _filters=$.createBlurFilter(128.0,128.0,3);
+    _bgbmp.filters=_fileters;*/
+    var _title=Bitmap.createBitmap({bitmapData:$G._get("minecraft_logo"),smoothing:false,lifeTime:0});
+    _title.setParent(maincanvas);
+    _title.transform.matrix3D=null;
+    _title.x=$.width/2-288/2;
+    _title.y=60;
+    var warning=$.createComment("   由于改动太大\n玩法请看评论区",{lifeTime:0,parent:maincanvas,color:0xffff00,fontsize:18,font:"system"});
+    warning.filters=null;
+    warning.x=$.width/2+288/4-20;
+    warning.y=60+48+8;
+    warning.rotationZ=-30;
+    createMCButton($.width/2-200,$.height/2-20-16-40,400,40,"单人游戏",gamestart,maincanvas);
+    createMCButton($.width/2-200,$.height/2-20,400,40,"多人游戏",function(){},maincanvas);
+    createMCButton($.width/2-200,$.height/2+20+16,400,40,"选项",option,maincanvas);
+    log("开始界面加载完成");
+    Player.pause();
+}
+
+startUI();

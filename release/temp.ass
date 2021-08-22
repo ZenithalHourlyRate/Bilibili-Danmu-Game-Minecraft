@@ -1,0 +1,221 @@
+var state=Global._get("MC_state");
+if(state=="Playing")
+{
+    if( ((event.charCode==87||event.charCode==117)&&(steve.see[0]>=0&&steve.see[0]<90))/*W w*/
+        || ((event.charCode==83||event.charCode==115)&&(steve.see[0]>=180&&stece.see[0]<270))/*S s*/
+        || ((event.charCode==65||event.charCode==97)&&(steve.see[0]>=270&&steve.see[0]<360))/*A a*/
+        || ((event.charCode==68||event.charCode==100)&&(steve.see[0]>=90&&steve.see[0]<180)) )/*D d*/
+    {
+        var angle=steve.see[0]%90.0;
+        steve.x+=feet*Math.cos(angle/360.0*2.0*Math.PI);
+        steve.y+=feet*Math.sin(angle/360.0*2.0*Math.PI);
+    }
+    else if( ((event.charCode==87||event.charCode==117)&&(steve.see[0]>=90&&steve.see[0]<180))/*W w*/
+        || ((event.charCode==83||event.charCode==115)&&(steve.see[0]>=270&&stece.see[0]<360))/*S s*/
+        || ((event.charCode==65||event.charCode==97)&&(steve.see[0]>=0&&steve.see[0]<90))/*A a*/
+        || ((event.charCode==68||event.charCode==100)&&(steve.see[0]>=180&&steve.see[0]<270)) )/*D d*/
+    {
+        var angle=steve.see[0]%90.0;
+        steve.y+=feet*Math.cos(angle/360.0*2.0*Math.PI);
+        steve.x-=feet*Math.sin(angle/360.0*2.0*Math.PI);
+    }
+    else if( ((event.charCode==87||event.charCode==117)&&(steve.see[0]>=180&&steve.see[0]<270))/*W w*/
+        || ((event.charCode==83||event.charCode==115)&&(steve.see[0]>=0&&stece.see[0]<90))/*S s*/
+        || ((event.charCode==65||event.charCode==97)&&(steve.see[0]>=90&&steve.see[0]<180))/*A a*/
+        || ((event.charCode==68||event.charCode==100)&&(steve.see[0]>=270&&steve.see[0]<360)) )/*D d*/
+    {
+        var angle=steve.see[0]%90.0;
+        steve.x-=feet*Math.cos(angle/360.0*2.0*Math.PI);
+        steve.y-=feet*Math.sin(angle/360.0*2.0*Math.PI);
+    }
+    else if( ((event.charCode==87||event.charCode==117)&&(steve.see[0]>=270&&steve.see[0]<360))/*W w*/
+        || ((event.charCode==83||event.charCode==115)&&(steve.see[0]>=90&&stece.see[0]<180))/*S s*/
+        || ((event.charCode==65||event.charCode==97)&&(steve.see[0]>=180&&steve.see[0]<270))/*A a*/
+        || ((event.charCode==68||event.charCode==100)&&(steve.see[0]>=0&&steve.see[0]<90)) )/*D d*/
+    {
+        var angle=steve.see[0]%90.0;
+        steve.y-=feet*Math.cos(angle/360.0*2.0*Math.PI);
+        steve.x+=feet*Math.sin(angle/360.0*2.0*Math.PI);
+    }
+    else if( event.charCode==32)
+    {
+
+    }
+    else
+    {
+
+    }
+}
+
+
+else if(keyCode==87){/*W w*/
+    if(steve.see[0]>=0&&steve.see[0]<90){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x+=feet*Math.cos(angle);
+        steve.y+=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=90&&steve.see[1]<180){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y+=feet*Math.cos(angle);
+        steve.x-=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=180&&steve.see[1]<270){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x-=feet*Math.cos(angle);
+        steve.y-=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=270&&steve.see[1]<360){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y-=feet*Math.cos(angle);
+        steve.x+=feet*Math.sin(angle);display_block();}
+    }
+}
+else if(keyCode==83){/*S s*/
+    if(steve.see[0]>=0&&steve.see[0]<90){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x-=feet*Math.cos(angle);
+        steve.y-=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=90&&steve.see[1]<180){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y-=feet*Math.cos(angle);
+        steve.x+=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=180&&steve.see[1]<270){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x+=feet*Math.cos(angle);
+        steve.y+=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=270&&steve.see[1]<360){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y+=feet*Math.cos(angle);
+        steve.x-=feet*Math.sin(angle);display_block();}
+    }
+}
+}
+else if(keyCode==65){/*A a*/
+    if(steve.see[0]>=0&&steve.see[0]<90){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y+=feet*Math.cos(angle);
+        steve.x-=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=90&&steve.see[1]<180){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x-=feet*Math.cos(angle);
+        steve.y-=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=180&&steve.see[1]<270){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y-=feet*Math.cos(angle);
+        steve.x+=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=270&&steve.see[1]<360){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x+=feet*Math.cos(angle);
+        steve.y+=feet*Math.sin(angle);display_block();}
+    }
+}
+}
+else if(keyCode==68){/*D d*/
+    if(steve.see[0]>=0&&steve.see[0]<90){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y-=feet*Math.cos(angle);
+        steve.x+=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=90&&steve.see[1]<180){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x+=feet*Math.cos(angle);
+        steve.y+=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=180&&steve.see[1]<270){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y+=feet*Math.cos(angle);
+        steve.x-=feet*Math.sin(angle);display_block();}
+    }
+    else if(steve.see[0]>=270&&steve.see[1]<360){
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x-=feet*Math.cos(angle);
+        steve.y-=feet*Math.sin(angle);display_block();}
+    }
+}
+}

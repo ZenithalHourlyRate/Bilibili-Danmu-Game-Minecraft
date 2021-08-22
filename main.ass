@@ -1,0 +1,489 @@
+/**Minecraft --dammu ver 0.01
+*used block 0,1,2,7,
+*0 to air
+*1 to stone
+*2 to grass dirt
+*3 to dirt
+*5** to wood
+*7 to bed stone
+*12 to sand
+*14 to Gold mine
+*15 to iron mine
+*16 to Coal mine
+*17 to tree
+*35** to sheep cut (of all kinds of color)
+*46 to TNT
+*56 to diamond mine
+*/
+var worldbase=[];
+var worldextra=[];
+var steve=
+{
+    x:0.1,
+    y:0.1,
+    z:0.1
+};
+var worldX;
+var worldY;
+var worldZ;
+var landline=64;
+
+var block0=0;
+var block1=1;
+var block2=2;
+var block3=3;
+var block500=500;var block501=501;var block502=502;var block503=503;var block504=504;var block505=505;
+var block7=7;
+var block12=12;
+var block14=14;
+var block15=15;
+var block16=16;
+var block17=17;
+var block3500=3500;var block3501=3501;var block3502=3503;var block3503=3503;var block3504=3504;var block3505=3505;
+var block3506=3506;var block3507=3507;var block3508=3508;var block3509=3509;var block3510=3510;var block3511=3511;
+var block3512=3512;var block3513=3513;var block3514=3514;var block3515=3515;/*Sheep cut*/
+var block46=46;
+var block56=56;
+
+var block=[block0,block1,block2,block3,
+                block500,block501,block502,block503,block504,block505,
+                block7,block12,block14,block15,block16,block17
+                block3500,block3501,block3502,block3503,block3504,block3505,block3506,
+                block3507,block3508,block3509,block3510,block3511,block3512,block3513,block3514,block3515,
+                block56,block46];
+var buildblock=[block1,block2,block3,
+                block500,block501,block502,block503,block504,block505,
+                block7,block12,block14,block15,block16,block17
+                block3500,block3501,block3502,block3503,block3504,block3505,block3506,
+                block3507,block3508,block3509,block3510,block3511,block3512,block3513,block3514,block3515,
+                block56,block46];
+var blocknormal=[block1,block2,block3,
+                block500,
+                block7,block12,block14,block15,block16,block17
+                block3500,
+                block56,block46];
+var blockbear=[block46];
+
+
+var startcanvas=$.createCanvas({lifeTime:0});
+startcanvas.transform.matrix3D=null;
+var maincanvas=$.createCanvas(lifeTime:0,parent:startcanvas);
+maincanvas.transform.matrix3D=null;
+var optioncanvas=$.createCanvas({lifeTime:0,parent:startcanvas});
+optioncanvas.transform.matrix3D=null;
+var gamecanvas=$.createCanvas({lifeTime:0});
+var blockcanvas=$.createCanvas({lifeTime:0,parent:gamecanvas});
+var blankcanvas=$.createCanvas({lifeTime:0,parent:gamecanvas});
+blankcanvas.transform.matrix3D=null;
+var logcanvas=$.createCanvas({lifeTime:0,parent:gamecanvas});
+logcanvas.transform.matrix3D=null;
+var pausecanvas=$.createCanvas({lifeTime:0,parent:gamecanvas});
+pausecanvas.transform.matrix3D=null;
+var danmucanvas=$.createCanvas({lifeTime:0});
+danmucanvas.transform.matrix3D=null;
+
+$.root.addEventListener("enterFrame",function(){
+    $.root.setChildIndex(startcanvas,$.root.numChildren-1);
+    $.root.setChildIndex(ganmecanvas,$.root.numChildren-1);
+    $.root.setChildIndex(danmucanvas,$.root.numChildren-1);
+});
+
+var seerange=[8,16,32,64,128];
+var see_point=1;
+var log_can=true;
+
+function worldmore()
+{
+    var tree=function(){};
+    var mountain=function(){
+        var fillblock=function(x1,y1.x2,y2,z,id){
+            var minx=Math.min(x1,x2);var maxx=Math.max(x1,x2);
+            var miny=Math.min(y1,y2);var maxy=Math.max(y1,y2);
+            while(minx<=maxx){
+                while(miny<=maxy){
+                    addBlock(minx,miny,z,id);
+                    ++miny;
+                }
+                ++minx;
+            }
+        };
+        var index1=Math.round(Math.random()*20);
+        var moun=[];
+        for(var index2=0;index2!=index1;++index2){
+            moun[index2]=[Math.random()*WorldX,Math.random()*WorldY];
+            for(var index3=0;index3<=Math.random()*32;++index3)
+                fillblock(moun[index2][0]-Math.random()*(50-index3*Math.random()*5),moun[index2][1]-Math.random()*(50-index3*Math.random()*5),
+                            moun[index2][0]+Math.random()*(50-index3*Math.random()*5),moun[index2][1]+Math.random()*(50-index3*Math.random()*5),landline+index3,block2);
+        }
+    };
+    var mine=function(){
+        var num_dia=Math.random()*100;
+        while(num_dia>0){
+            addBlock(Math.random()*worldX,Math.random()*worldY,1+Math.random*15,block56);
+            --num_dia;
+        }
+        var num_iron=200+Math.random()*100;
+        while(num_iron>0){
+            addBlock(Math.random()*worldX,Math.random()*worldY,1+Math.random*landline,block15);
+            --num_iron;
+        }
+        var num_au=100*Math.random()*50;
+        while(num_au>0){
+            addBlock(Math.random()*worldX,Math.random()*worldY,1+Math.random*(landline-16),block14);
+            --num_au;
+        }
+        var num_coal=500*Math.random()*250;
+        while(num_coal>0){
+            addBlock(Math.random()*worldX,Math.random()*worldY,1+Math.random*(landline-16),block16);
+            --num_coal;
+        }
+    };
+    mountian();
+    mine();
+    /*tree();*/
+    /* Will be more;*/
+}
+
+function createWorld(sizeX,sizeY,sizeZ)
+{
+    log("创造世界中...");
+    var x=0,y=0,z=0;
+    worldX=sizeX;
+    worldY=sizeY;
+    worldZ=sizeZ;/*
+    for(var indexx=0;indexx!=sizeX;++indexx)
+    {
+        for(var indexy=0;indexy!=sizeY;++indexy)
+        {
+            for(var indexz=0;indexz!=sizeZ;++indexz)
+                world[indexx*indexy*indexz]=0;
+        }
+    }
+*/
+    /*create fact block*/
+/*    for(var index1=0;index1!=sizeX;++index1)
+    {
+        for(var index2=0;index2!=sizeY;++index2)
+        {
+            world[x*sizeY*sizeZ+y*sizeZ+0]=7;
+            world[x*sizeY*sizeZ+y*sizeZ+1]=1;
+            world[x*sizeY*sizeZ+y*sizeZ+2]=1;
+            world[x*sizeY*sizeZ+y*sizeZ+3]=2;
+            ++y;
+        }
+        ++x;
+        y=0;
+    }
+    x=0;*/
+    log("创造基础世界...");
+    worldbase[0]=block7;
+    for(var indexa=1;indexa!=landline-3;++indexa)
+        worldbase[indexa]=block1;
+    for(var indexb=landline-3;indexb!=landline-1;++indexb)
+        worldbase[indexb]=block3;
+    worldbase[landline-1]=block2;
+    for(var indexc=landline;indexc!=sizeZ;++indexc)
+        worldbase[indexc]=block0;
+    for(var indexd=0;indexd!=-landline;--indexd)
+        worldbase[indexd]=block0;
+    log("创造扩展世界...");
+    worldmore();
+    log("世界创造完成");
+    Global._set("MC_state","playing");
+    Global._set("MC_worldbase",worldbase);
+    Global._set("MC_worldextra",worldextra);
+    Global._set("MC_world_X",worldX);
+    Global._set("MC_world_Y",worldY);
+    Global._set("MC_world_Z",worldZ);
+    Global._set("MC_mousein",true);
+}
+
+function ceilxyz(cx,cy,cz)
+{
+    var func=function(num)
+    {
+        var mininum=floor(num);
+        var maxinum=ceil(num);
+        if(num<=(mininum+0.5))
+            return mininum;
+        else return maxinum;
+    };
+    return [func(cx),func(cy),func(cz)];
+}
+
+function existblock(ex,ey,ez)
+{
+    var arxyz=ceilxyz(ex,ey,ez);
+    ex=arxyz[0];ey=arxyz[1];ez=arxyz[2];
+    if(worldbase[ez]==block0)
+    {
+        for(var ei=0;ei!=worldextra.length;++ei)
+        {
+            if(worldextra[ei].x==ex&&worldextra[ei].y==ey&&worldextra[ei].z==ez)
+            {
+                if(worldextra[ei].id!=block0)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    else
+    {
+        for(var ei=0;ei!=worldextra.length;++ei)
+        {
+            if(worldextra[ei].x==ex&&worldextra[ei].y==ey&&worldextra[ei].z==ez)
+            {
+                if(worldextra[ei].id==block0)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
+
+function addBlock(ax,ay,az,aid)
+{
+    var arxyz=ceilxyz(ax,ay,az);
+    ax=arxyz[0];ay=arxyz[1];az=arxyz[2];
+    var newblock={
+    x:ax,
+    y:ay,
+    z:az,
+    id:aid
+    };
+    worldextra[worldextra.length]=newblock;
+    Global._set("MC_worldextra",worldextra);
+}
+
+function destroyBlock(dx,dy,dz)
+{
+    var arxyz=ceilxyz(dx,dy,dz);
+    dx=arxyz[0];dy=arxyz[1];dz=arxyz[2];
+    var nullblock={
+        x:dx,
+        y:dy,
+        z:dz,
+        id:block0};
+    for(var indexd=0;indexd!=worldextra.length;++indexd)
+    {
+        if(worldextra[indexd].x==dx&&worldextra[indexd].y==dy&&worldextra[indexd].z==dz)
+        {
+            worldextra[indexd]=nullblock;
+            Global._set("MC_worldextra",worldextra);
+            return ;
+        }
+    }
+    worldextra[worldextra.length]=nullblock;
+    Global._set("MC_worldextra",worldextra);
+}
+
+function getId(x,y,z){
+     var arxyz=ceilxyz(x,y,z);
+     x=arxyz[0];y=arxyz[1];z=arxyz[2];
+    for(var indexa=0;indexa!=worldextra.length;++indexa){
+        if(worldextra[indexa].x==x&&worldextra[indexa].y==y&&worldextra[indexa].z==z){
+            return worldextra[indexa];
+        }
+    }
+    return worldbase[z];
+}
+
+/* Designing
+function idcanbeputinground(id)
+{
+    if(id==unknownnow)
+        return false;
+    else return true;
+}
+*/
+function createSteve()
+{
+    log("创造人物中...");
+    steve.x+=worldX/2;
+    steve.y+=worldY/2;
+    steve.z+=landline;
+    log("位置设置完成");
+    steve.health=20;
+    steve.hunger=20;
+    steve.equipment=0;
+    steve.blockhold=blocknormal;
+    steve.in_hand=steve.blockhold.length-1;
+    steve.blank=[];
+    steve.blank.length=9;
+    for(var indexb=0;indexb!=9;++indexb)steve.blank[indexb]=steve.blockhole.length-1;
+    steve.select=true;
+    steve.blank_point=0;
+    steve.see=[90.0,0.0];
+    steve.putblock=function(x,y,z)
+    {
+            if(steve.select=true)
+            addBlock(x,y,z,steve.blockhold[steve.in_hand]);
+            else{var selected=steve.blank[steve.blank_point];
+            addBlock(x,y,z,steve.blockhold[selected]);}
+            return ;
+    };
+    steve.getblock=function(id)
+    {
+/*        var findsameblock=function(id)
+        {
+            for(var index=0;index!=steve.object_blank.size;++index){
+                if(steve.object_blank.things[index].id==id)
+                    return {num:index,place:'blank'};
+            }
+            for(var index2=0;index2!=steve.backpack.size;++index2){
+                if(steve.backpack.things[index2].id==id)
+                    return {num:index2,place:'back'};
+            }
+            return {place:'null'};
+        }
+        var finded=findsameblock(id)
+        if( finded.place!='null' )
+            finded.place=='blank'? steve.object_blank.things[finded.num].num++:
+                                                   steve.backpack.things[finded.num].num++;
+        else {
+            finded=findsameblock(block0);
+            if( finded.place!='null' )
+            finded.place=='blank'? (steve.object_blank.things[finded.num].num=1,steve.object_blank.things[finded.num].id=id):
+                                                   (steve.backpack.things[finded.num].num=1,steve.backpack.things[finded.num].id=id);
+        }*/
+    };log("人物属性设置完成");
+    Global._set("MC_steve",steve);
+    log("人物创造完成");
+}
+/*
+function createFallLinklist()
+{
+    var start={};
+    start.used=1;
+    start.next={};
+    return start;
+}
+
+var fall=
+{
+    fall_things:{},
+    init:function()
+    {
+        fall_things=createFallLinklist();
+    }
+    append:function(id,x,y,z)
+    {
+        var temp=createFallLinklist();
+        temp.id=id;
+        temp.x=x;
+        temp.y=y;
+        temp.z=z;
+        temp.num=1;
+        if(typeof(fall_things.next.used)=="undefined")
+        {
+            fall_things.next=temp;
+        }
+        else
+        {
+            var fanext=fall_things.next;
+            while(typeof(fanext.next.used)!="undefined")
+            {
+            var fanext=fanext.next;
+            }
+            fanext.next=temp;
+        }
+    },
+    find:function(id,x,y,z)
+    {
+        for(var ffi=0;ffi!=numbers;++ffi)
+        {
+
+        }
+    },
+    find_empty:function()
+    {
+
+    },
+    erase:function(id,x,y,z)
+    {
+
+        --numbers;
+    }
+};
+*/
+var falling=false;
+var falltime=0;
+var nexthigh=0.1;
+var fallall=0;
+var p_g=0.2 /* m/s^2 */
+var p_v=0;   /* m/s */
+
+function gravity(){
+    log("重力引擎启动");
+    interval(function(){
+             if(!existblock(steve.x,steve.y,steve.z-0.5-nexthigh)){
+                if(falling==true){
+                    /*var fallhigh=0.1*(falltime+1)*(falltime+1);
+                    steve.z-=nexthigh;fallall+=nexthigh;
+                    nexthigh=fallhigh-fallall;
+                    if(nexthigh>0.9)
+                    ++falltime;
+                    if(existblock(steve.x,steve.y,steve.z-0.5-nexthigh))
+                    {
+
+                    }*/
+                    p_v=p_g*falltime;
+                    if(falltime>5){
+                        p_v=1.0;
+                        fallall+=1.0;
+                        steve.z-=1.0;
+                        nextfall=1.0;
+                    }else{
+                        fallall+=0.5*(p_v+p_g*(falltime-1))*1.0;
+                        steve.z-=0.5*(p_v+p_g*(falltime-1))*1.0;
+                        nextfall=0.5*(p_v+p_g*(falltime+1))*1.0;
+                    }
+                    ++falltime;
+                    if(existblock(steve.x,steve.y,steve.z-0.5-nexthigh)){
+                        timer(function(){while(!existblock(steve.x,steve.y,steve.z-0.5-0.1))steve.z-=0.1;},75);
+                        falling=false;
+                        nexthigh=0.1;fallall=0;falltime=0;
+                    }
+                }
+                else{
+                    falltime=1;
+                    falling=true;
+                }
+             }
+             },100,0)
+}
+
+var time=0;
+
+function timeloop()
+{   log("时间引擎启动");
+    interval(function()
+             {
+                 ++time;
+                 Global._set("MC_time",time);
+             },100,0);
+}
+var nowheight=$.height;
+function texture(){
+    loadBlock();
+    interval(function(){
+                if($.height==nowheight)
+                    return;
+                else reloadBlock();
+    },100,0);
+}
+
+
+function gamestart(){
+Player.play();
+createWorld(512,512,128);
+createSteve();
+
+timeloop();
+gravity();
+texture();
+}

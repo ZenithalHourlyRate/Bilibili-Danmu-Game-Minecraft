@@ -1,0 +1,17 @@
+var logoM =$.createShape({lifeTime:time,parent:canvas});
+logoM.transform.matrix3D = null;
+logoM.graphics.beginFill(0xf6883e);
+logoM.graphics.moveTo(439.0/1600.0*$.width,371.0/900.0*$.height);
+logoM.graphics.lineTo(499.0/1600.0*$.width,371.0/900.0*$.height);
+logoM.graphics.lineTo(524.0/1600.0*$.width,438.0/900.0*$.height);
+logoM.graphics.lineTo(549.0/1600.0*$.width,371.0/900.0*$.height);
+logoM.graphics.lineTo(609.0/1600.0*$.width,371.0/900.0*$.height);
+logoM.graphics.lineTo(609.0/1600.0*$.width,482.0/900.0*$.height);
+logoM.graphics.lineTo(572.0/1600.0*$.width,482.0/900.0*$.height);
+logoM.graphics.lineTo(572.0/1600.0*$.width,402.0/900.0*$.height);
+logoM.graphics.lineTo(541.0/1600.0*$.width,482.0/900.0*$.height);
+logoM.graphics.lineTo(508.0/1600.0*$.width,482.0/900.0*$.height);
+logoM.graphics.lineTo(477.0/1600.0*$.width,402.0/900.0*$.height);
+logoM.graphics.lineTo(477.0/1600.0*$.width,482.0/900.0*$.height);
+logoM.graphics.lineTo(439.0/1600.0*$.width,482.0/900.0*$.height);
+logoM.graphics.lineTo(439.0/1600.0*$.width,371.0/900.0*$.height);

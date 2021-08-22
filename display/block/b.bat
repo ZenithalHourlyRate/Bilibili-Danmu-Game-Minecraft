@@ -1,0 +1,1 @@
+block_trans steve_head.bmp steve_head.txt

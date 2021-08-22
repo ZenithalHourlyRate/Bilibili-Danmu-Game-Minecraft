@@ -1,0 +1,22 @@
+/*
+*Log system
+*/
+
+/*var logcanvas=$.createCanvas({lifeTime:0,parent,canvas});*/
+/*log_canvas.transform.matrix3D=null;*/
+var log_all=[];
+function log_oldup(){
+for(var indexl=0;indexl!=log_all.length;++indexl)
+    log_all[indexl].y-=18;
+}
+
+function log(text){
+    if(log_can){
+    log_oldup();
+    var new_comment=$.createComment(text,{lifeTime:5.0,x:10,y:$.height-36,fontsize:18,color:0x7f7f7f,font:"system",
+                                            parent:logcanvas,motion:{alpha:{fromValue:1.0,toValue:0.0,lifeTime:1.5,startDelay:3500}}});
+    new_comment.filters=null;
+    new_comment.bold=false;
+    log_all[log_all.length]=new_comment;
+    }
+}

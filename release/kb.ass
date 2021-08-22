@@ -1,0 +1,148 @@
+/*
+*keyboard
+*/
+/*var building in mouse.ass*/
+var flying=true;
+var UP_d=38;var UP_u=381;
+var Down=40;
+var Left=37;var Right=39;var Wk=87;var Ak=65;var Sk=83;var Dk=68;
+var End=35;var Home=36;
+var keykeep=[];
+for(var indexk=0;indek!=10;++indexk)keykeep[indexk]={key:0,time:0};
+function addkey(kkey,ktime){
+    for(var indexk1=0;indexk1!=9;++indexk1){
+        keykeep[indexk1]=keykeep[indexk1+1];
+    }
+    keykeep[9]={key:kkey,time:ktime};
+}
+function checkflying(){
+    if(keykeep[7].id==UP_d&&keykeep[8].id==UP_u&&keykeep[9].id==UP_d){
+        if((keykeep[9].time-keykeep[7].time)<=15)
+            flying= !flying;
+    }
+}
+
+function keydown(keyCode)
+{
+var feet=0.15;
+if(keyCode==35)/*End*/
+{
+    $G._set("MC_mousein",!$G._get("MC_mousein"));
+    return ;
+}
+if($G._get("MC_state")=="Playing"&&$G._get("MC_mousein"))
+{
+addkey(keyCode,$G._get("MC_time"));log("按键");
+    if(keyCode==36 ){/*Home*/
+        building=!building;
+    }
+    else if( keyCode==38)/* UP */
+    {   checkflying();
+        if(flying==false){
+        interval(function()
+                 {
+                     if(!existblock(steve.x,steve.y,steve.z+1.0+0.5+0.1))
+                    steve.z+=0.1;
+                 },10,12);
+        }else {
+        if(!existblock(steve.x,steve.y,steve.z+1+0.5+0.1))
+            steve.z+=0.1;
+        }
+    }
+    else if(keyCode==40)/* Down */
+    {
+        if(!existblock(steve.x,steve.y,steve.z-0.5-0.1))
+            steve.z-=0.1;
+    }
+    else if(keyCode==37)/*Left*/
+    {
+        --steve.in_hand;
+        if(steve.in_hand<0)steve.in_hand=block.length-1;
+    }
+    else if(keyCode==39)/*Right*/
+    {
+        ++steve.in_hand;
+        if(steve.in_hand>(block.length-1))steve.in_hand=0;
+    }
+    else if(keyCode==96){/* 0 */
+        steve.select=!steve.select;
+    }
+    else if(keyCode>96&&keyCode<106){/* 1~9 */
+        if(steve.select==true)steve.blank[keyCode-96-1]=steve.in_hand;
+        else steve.blank_point=keyCode-96-1;
+    }
+    else if( ((keyCode==87 )&&(steve.see[0]>=0&&steve.see[0]<90))/*W w*/
+        || ((keyCode==83)&&(steve.see[0]>=180&&stece.see[0]<270))/*S s*/
+        || ((keyCode==65)&&(steve.see[0]>=270&&steve.see[0]<360))/*A a*/
+        || ((keyCode==68)&&(steve.see[0]>=90&&steve.see[0]<180)) )/*D d*/
+    {
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.cos(angle),
+                            steve.y+feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x+=feet*Math.cos(angle);
+        steve.y+=feet*Math.sin(angle);}
+    }
+    else if( ((keyCode==87)&&(steve.see[0]>=90&&steve.see[0]<180))/*W w*/
+        || ((keyCode==83)&&(steve.see[0]>=270&&stece.see[0]<360))/*S s*/
+        || ((keyCode==65)&&(steve.see[0]>=0&&steve.see[0]<90))/*A a*/
+        || ((keyCode==68)&&(steve.see[0]>=180&&steve.see[0]<270)) )/*D d*/
+    {
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x-feet*Math.sin(angle),
+                            steve.y+feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y+=feet*Math.cos(angle);
+        steve.x-=feet*Math.sin(angle);}
+    }
+    else if( ((keyCode==87)&&(steve.see[0]>=180&&steve.see[0]<270))/*W w*/
+        || ((keyCode==83)&&(steve.see[0]>=0&&stece.see[0]<90))/*S s*/
+        || ((keyCode==65)&&(steve.see[0]>=90&&steve.see[0]<180))/*A a*/
+        || ((keyCode==68)&&(steve.see[0]>=270&&steve.see[0]<360)) )/*D d*/
+    {
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z-0.5))
+           &&existblock(steve.x-feet*Math.cos(angle),
+                            steve.y-feet*Math.sin(angle),steve.z+1.5))
+           ){
+        steve.x-=feet*Math.cos(angle);
+        steve.y-=feet*Math.sin(angle);}
+    }
+    else if( ((keyCode==87)&&(steve.see[0]>=270&&steve.see[0]<360))/*W w*/
+        || ((keyCode==83)&&(steve.see[0]>=90&&stece.see[0]<180))/*S s*/
+        || ((keyCode==65)&&(steve.see[0]>=180&&steve.see[0]<270))/*A a*/
+        || ((keyCode==68)&&(steve.see[0]>=0&&steve.see[0]<90)) )/*D d*/
+    {
+        var angle=(steve.see[0]%90.0)/360.0*2.0*Math.PI;
+        if((!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z-0.5))
+           &&(!existblock(steve.x+feet*Math.sin(angle),
+                            steve.y-feet*Math.cos(angle),steve.z+1.5))
+           ){
+        steve.y-=feet*Math.cos(angle);
+        steve.x+=feet*Math.sin(angle);}
+    }
+}
+
+}
+
+function keyUp(keyCode)
+{
+
+if($G._get("MC_state")=="Playing"&&$G._get("MC_mousein")){
+    if(keyCode==38){
+            addkey(UP_u,$G._get("MC_time"));
+            return ;
+    }
+}
+
+}
+
+Player.keyTrigger(keyDown,0xffffff);
+Player.keyTrigger(keyUp,0xffffff,true);
+/*$.root.addEventListener("keyDown",keydown);*/

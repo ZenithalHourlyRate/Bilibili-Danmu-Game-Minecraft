@@ -1,0 +1,45 @@
+var olddanmu=0;
+for(var danmuindex=0;danmuindex!=Player.commentList.length;++danmuindex){
+    if(Player.commentList[danmuindex].danmuId>olddanmu&&Player.commentList[danmuindex].mode!=8)
+        olddanmu=Player.commentList[danmuindex].danmuId;
+}
+function zhibo(){
+    var display_danmu=[];
+    for(var index1=0;index1!=Player.commentList.length;++index1){
+        if(Player.commentList[index1].danmuId>olddanmu&&Player.commentList[index1].mode!=8){
+            display_danmu[display_danmu.length]={id:Player.commentList[index1].danmuId,text:Player.commentList[index1].text,
+                                                                                color:Player.commentList[index1].color};
+        }
+    }
+    for(var index2=0;index2!=display_danmu.length;++index2){
+    if(display_danmu[index2].id>olddanmu)
+        olddanmu=display_danmu[index2].id;
+    }
+    for(var index3=0;index3!=display_danmu.length;++index3)
+        display_zhibo(display_danmu[index3]);
+}
+function display_zhibo(comment){
+    var space=[];
+    space.length=$.height-2-2/20;
+    for(var index1=0;index1!=space.length;++index1)
+        space[index1]=true;
+    for(var child1=0;child1!=danmucanvas.numChildren;++child1){
+        var childtemp=danmucanvas.getChildAt(child1);
+        if(childtemp.x<$.width&&childtemp.x+childtemp.textWidth>$.height){
+            space[(childtemp.y-2)/20]=false;
+        }
+    }
+    var _comment_y=-1;
+    for(var index2=0;index2!=space.length;++index2){
+        if(space[index2]==true){
+        _comment_y=index2*20+2;
+        break;}
+    }
+    if(_comment_y==-1)
+        _comment_y=0;
+    var tempcomment=$.createComment(comment.text,{parent:danmucanvas,x:$.width+4,y:_comment_y,lifeTime:4.0,fontsize:20});
+    var realcomment=$.createComment(comment.text,{parent:danmucanvas,x:$.width+4,y:_comment_y,lifeTime:4.0,fontsize:20,color:comment.color,
+                                    motion:{x:{fromValue:$.width+4,toValue:0-tempcomment.textWidth,lifeTime:4.0}} })
+    tempcomment.visible=false;
+}
+$.root.addEventListener("enterFrame",zhibo);

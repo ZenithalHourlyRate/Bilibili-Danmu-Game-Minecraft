@@ -1,0 +1,15 @@
+var logoN =$.createShape({lifeTime:time,parent:canvas});
+logoN.transform.matrix3D = null;
+logoN.graphics.beginFill(0xf6883e);
+logoN.graphics.moveTo(1026.0/1600.0*$.width,371.0/900.0*$.height);
+logoN.graphics.lineTo(1064.0/1600.0*$.width,371.0/900.0*$.height);
+logoN.graphics.lineTo(1125.0/1600.0*$.width,433.0/900.0*$.height);
+logoN.graphics.lineTo(1125.0/1600.0*$.width,371.0/900.0*$.height);
+logoN.graphics.lineTo(1167.0/1600.0*$.width,371.0/900.0*$.height);
+logoN.graphics.lineTo(1167.0/1600.0*$.width,482.0/900.0*$.height);
+logoN.graphics.lineTo(1125.0/1600.0*$.width,482.0/900.0*$.height);
+logoN.graphics.lineTo(1068.0/1600.0*$.width,424.0/900.0*$.height);
+logoN.graphics.lineTo(1068.0/1600.0*$.width,482.0/900.0*$.height);
+logoN.graphics.lineTo(1026.0/1600.0*$.width,482.0/900.0*$.height);
+logoN.graphics.lineTo(1026.0/1600.0*$.width,371.0/900.0*$.height);
+logoN.graphics.endFill();

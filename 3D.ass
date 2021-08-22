@@ -1,0 +1,83 @@
+/*伪全息弹幕系统--by众人*/
+var canvas=$.createCanvas({lifeTime:0});
+ScriptManager.popEl(canvas);
+$.root.addChild(canvas);
+var leftcanvas=$.createCanvas({lifeTime:0,parent:canvas});
+ScriptManager.popEl(leftcanvas);
+canvas.addChild(leftcanvas);
+var rightcanvas=$.createCanvas({lifeTime:0,parent:canvas});
+ScriptManager.popEl(rightcanvas);
+canvas.addChild(rightcanvas);
+var upcanvas=$.createCanvas({lifeTime:0,parent:canvas});
+ScriptManager.popEl(upcanvas);
+canvas.addChild(upcanvas);
+var downcanvas=$.createCanvas({lifeTime:0,parent:canvas});
+ScriptManager.popEl(downcanvas);
+canvas.addChild(downcanvas);
+var oldWidth=$.width;
+var oldHeight=$.height;
+var bi=(0.1+oldWidth)/oldHeight;
+var screenX=oldHeight*(2.0/(2.0*bi+1.0));
+var screenY=oldHeight*(2.0/(bi+2.0));
+var screenScale=Math.min(screenX/oldWidth,screenY/oldHeight);
+leftcanvas.x=oldWidth/2-oldHeight/2;
+leftcanvas.y=oldHeight/2-screenX/2;
+leftcanvas.rotationZ=90;
+leftcanvas.rotationX=180;
+leftcanvas.scaleX=leftcanvas.scaleY=screenScale;
+rightcanvas.x=oldWidth/2+oldHeight/2;
+rightcanvas.y=oldHeight/2+screenX/2;
+rightcanvas.rotationY=180;
+rightcanvas.rotationZ=90;
+rightcanvas.scaleX=rightcanvas.scaleY=screenScale;
+upcanvas.x=oldWidth/2+screenX/2;
+upcanvas.y=0;
+upcanvas.rotationY=180;
+upcanvas.scaleX=upcanvas.scaleY=screenScale;
+downcanvas.x=oldWidth/2-screenX/2;
+downcanvas.y=oldHeight;
+downcanvas.rotationX=180;
+downcanvas.scaleX=downcanvas.scaleY=screenScale;
+var adding=false;
+function displayRunComment(object){
+    adding=true;
+    var l=$.createComment(object.text,{color:object.color, x:object.x, y:object.y, lifeTime:4.0,
+                                                                fontsize:object.fontsize*4,
+                                                                motion:{x:{fromValue:object.x,toValue:(-object.fontsize*4*object.text.length),lifeTime:4.0} },
+                                                                parent:leftcanvas});
+    l.transform.matrix3D=null;
+    var r=$.createComment(object.text,{color:object.color, x:object.x, y:object.y, lifeTime:4.0,
+                                                                fontsize:object.fontsize*4,
+                                                                motion:{x:{fromValue:object.x,toValue:(-object.fontsize*4*object.text.length),lifeTime:4.0} },
+                                                                parent:rightcanvas});
+    r.transform.matrix3D=null;
+    var u=$.createComment(object.text,{color:object.color, x:object.x, y:object.y, lifeTime:4.0,
+                                                                fontsize:object.fontsize*4,
+                                                                motion:{x:{fromValue:object.x,toValue:(-object.fontsize*4*object.text.length),lifeTime:4.0} },
+                                                                parent:upcanvas});
+    u.transform.matrix3D=null;
+    var d=$.createComment(object.text,{color:object.color, x:object.x, y:object.y, lifeTime:4.0,
+                                                                fontsize:object.fontsize*4,
+                                                                motion:{x:{fromValue:object.x,toValue:(-object.fontsize*4*object.text.length),lifeTime:4.0} },
+                                                                parent:downcanvas});
+    d.transform.matrix3D=null;
+    adding=false;
+}
+
+function addComment(e){
+    /*if(e.target.construstor=="[class Comment]"){
+
+    }
+    else*/ if(e.target.constructor=="[class ScrollComment]"&&adding==false){
+            e.target.visible=false;
+            var comment={};
+            trace(comment.text=e.target.data.text);
+            trace(comment.color=e.target.textColor);
+            trace(comment.x=e.target.x);
+            trace(comment.y=e.target.y);
+            trace(comment.fontsize=e.target.data.size);
+            displayRunComment(comment);
+    }
+}
+
+$.root.addEventListener('added',addComment);

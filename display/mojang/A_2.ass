@@ -1,0 +1,8 @@
+var logoA_2 =$.createShape({lifeTime:time,parent:canvas});
+logoA_2.transform.matrix3D = null;
+logoA_2.graphics.beginFill(0xffffff);
+logoA_2.graphics.moveTo(948.0/1600.0*$.width,405.0/900.0*$.height);
+logoA_2.graphics.lineTo(964.0/1600.0*$.width,442.0/900.0*$.height);
+logoA_2.graphics.lineTo(931.0/1600.0*$.width,442.0/900.0*$.height);
+logoA_2.graphics.lineTo(948.0/1600.0*$.width,405.0/900.0*$.height);
+logoA_2.graphics.endFill();

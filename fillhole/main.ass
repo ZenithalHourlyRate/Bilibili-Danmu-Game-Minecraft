@@ -1,0 +1,999 @@
+/**Minecraft --dammu ver 0.01
+*used block 0,1,2,7,
+*0 to air
+*1 to stone
+*2 to grass dirt
+*3 to dirt
+*5** to wood
+*7 to bed stone
+*12 to sand
+*14 to Gold mine
+*15 to iron mine
+*16 to Coal mine
+*17 to tree
+*35** to sheep cut (of all kinds of color)
+*46 to TNT
+*56 to diamond mine
+*/
+var worldbase=[];
+var worldextra=[];
+var steve={};
+var worldX;
+var worldY;
+var landline=64;
+
+var block0=0;
+var block1=1;
+var block2=2;
+var block3=3;
+var block500=500;var block501=501;var block502=502;var block503=503;var block504=504;var block505=505;
+var block7=7;
+var block12=12;
+var block14=14;
+var block15=15;
+var block16=16;
+var block17=17;
+var block3500=3500;var block3501=3501;var block3502=3503;var block3503=3503;var block3504=3504;var block3505=3505;
+var block3506=3506;var block3507=3507;var block3508=3508;var block3509=3509;var block3510=3510;var block3511=3511;
+var block3512=3512;var block3513=3513;var block3514=3514;var block3515=3515;/*Sheep cut*/
+var block46=46;
+var block56=56;
+
+var block=[block0,block1,block2,block3,
+                block500,block501,block502,block503,block504,block505,
+                block7,block12,block14,block15,block16,block17,
+                block3500,block3501,block3502,block3503,block3504,block3505,block3506,
+                block3507,block3508,block3509,block3510,block3511,block3512,block3513,block3514,block3515,
+                block56,block46];
+var blockbuild=[block1,block2,block3,
+                block500,block501,block502,block503,block504,block505,
+                block7,block12,block14,block15,block16,block17,
+                block3500,block3501,block3502,block3503,block3504,block3505,block3506,
+                block3507,block3508,block3509,block3510,block3511,block3512,block3513,block3514,block3515,
+                block56,block46];
+var blocknormal=[block1,block2,block3,
+                block500,
+                block7,block12,block14,block15,block16,block17,
+                block3500,
+                block56,block46];
+var blockbear=[block46];
+
+
+var startcanvas=$.createCanvas({lifeTime:0});
+startcanvas.transform.matrix3D=null;
+ScriptManager.popEl(startcanvas);
+$.root.addChild(startcanvas);
+var maincanvas=$.createCanvas({lifeTime:0,parent:startcanvas});
+maincanvas.transform.matrix3D=null;
+ScriptManager.popEl(maincanvas);
+startcanvas.addChild(maincanvas);
+var optioncanvas=$.createCanvas({lifeTime:0,parent:startcanvas});
+optioncanvas.transform.matrix3D=null;
+ScriptManager.popEl(optioncanvas);
+startcanvas.addChild(optioncanvas);
+var gamecanvas=$.createCanvas({lifeTime:0});
+gamecanvas.transform.matrix3D=null;
+ScriptManager.popEl(gamecanvas);
+$.root.addChild(gamecanvas);
+var backgroundcanvas=$.createCanvas({lifeTime:0,parent:gamecanvas});
+ScriptManager.popEl(backgroundcanvas);
+gamecanvas.addChild(backgroundcanvas);
+var blockcanvas=$.createCanvas({lifeTime:0,parent:gamecanvas});
+ScriptManager.popEl(blockcanvas);
+gamecanvas.addChild(blockcanvas);
+var blankcanvas=$.createCanvas({lifeTime:0,parent:gamecanvas});
+blankcanvas.transform.matrix3D=null;
+ScriptManager.popEl(blankcanvas);
+gamecanvas.addChild(blankcanvas);
+var logcanvas=$.createCanvas({lifeTime:0,parent:gamecanvas});
+logcanvas.transform.matrix3D=null;
+ScriptManager.popEl(logcanvas);
+gamecanvas.addChild(logcanvas);
+var pausecanvas=$.createCanvas({lifeTime:0,parent:gamecanvas});
+pausecanvas.transform.matrix3D=null;
+ScriptManager.popEl(pausecanvas);
+gamecanvas.addChild(pausecanvas);
+var danmucanvas=$.createCanvas({lifeTime:0});
+danmucanvas.transform.matrix3D=null;
+ScriptManager.popEl(danmucanvas);
+$.root.addChild(danmucanvas);
+
+$.root.addEventListener("enterFrame",function(){
+    $.root.setChildIndex(startcanvas,$.root.numChildren-1);
+    $.root.setChildIndex(gamecanvas,$.root.numChildren-1);
+    $.root.setChildIndex(danmucanvas,$.root.numChildren-1);
+});
+
+var building=false;
+var holdblock=blocknormal;
+var mine_can=false;
+
+function show_blank(){
+    while(blankcanvas.numChildren>0){
+        blankcanvas.removeChildAt(0);
+    }/*
+    var _plus=$.createComment("+",{fontsize:36,parent:blankcanvas,lifeTime:0});
+    _plus.transform.matrix3D=null;
+    _plus.filters=null;
+    _plus.x=$.width/2-_plus.textWidth/2;
+    _plus.y=$.height/2-_plus.textHeight/2;*/
+    var _blank=$.createShape({parent:blankcanvas,lifeTime:0});
+    _blank.transform.matrix3D=null;
+    _blank.graphics.lineStyle(5,0xff5d5d5d,1.0,true,"none","none","bevel");
+    for(var index1=0;index1!=9;index1++){
+        _blank.graphics.drawRect($.width/2-4.5*($.height/10)+index1*($.height/10),$.height-5-$.height/10,$.height/10,$.height/10);
+    }
+    if(!steve.select){
+        _blank.graphics.lineStyle(7,0xffa1b29d,1.0,true,"none","none","bevel");
+        _blank.graphics.drawRect($.width/2-4.5*($.height/10)+steve.blank_point*($.height/10),$.height-5-$.height/10,$.height/10,$.height/10);
+    }
+        _blank.graphics.endFill();
+    var _bmd=[];_bmd.length=9;
+    var _bitmap=[];_bitmap.length=9;
+    for(var index2=0;index2!=9;++index2){
+            var blockidp=steve.blank[index2];
+        _bmd[index2]=$G._get("bmd_blocks"+steve.blockhold[blockidp]);
+        _bitmap[index2]=Bitmap.createBitmap({bitmapData:_bmd[index2],smoothing:false,lifeTime:0});
+        _bitmap[index2].setParent(blankcanvas);
+        _bitmap[index2].transform.matrix3D=null;
+        _bitmap[index2].x=$.width/2-4.5*($.height/10)+($.height/20-16)+($.height/10)*index2;
+        _bitmap[index2].y=$.height+($.height/20-20)-$.height/10;
+    }
+    var _in_hand=steve.in_hand;
+    var _handblock=steve.blockhold[_in_hand];
+    var _handbmd=$G._get("bmd_blocks"+_handblock);
+    var _hand=Bitmap.createBitmap({bitmapData:_handbmd,smoothing:false,lifeTime:0});
+    _hand.setParent(blankcanvas);
+    _hand.transform.matrix3D=null;
+    _hand.x=$.width/2+4.5*($.height/10)+($.height/10)+($.height/20-16);
+    _hand.y=$.height-($.height/8);
+}
+
+function display_blank(){
+    show_blank();
+}
+
+var dismap={};
+var disarray=[];
+var blockWidth=Math.floor($.width/16);
+if(blockWidth%2==0)blockWidth+=2;else blockWidth+=1;
+var blockHeight=Math.floor($.height/16);
+if(blockHeight%2==0)blockHeight+=2;else blockHeight+=1;
+var steveWhere=[blockWidth/2,blockHeight/2];
+function init_dis(){
+    var _bitmapdata=Bitmap.createBitmapData(blockWidth*16,blockHeight*16,true,0x00ffffff);
+    dismap=Bitmap.createBitmap({bitmapData:_bitmapdata,smoothing:false,lifeTime:0});
+    ScriptManager.popEl(dismap);
+    blockcanvas.addChild(dismap);
+    dismap.setParent(blockcanvas);
+    dismap.transform.matrix3D=null;
+}
+function dis_first(){
+    blockWidth=Math.floor($.width/16);
+    if(blockWidth%2==0)blockWidth+=2;else blockWidth+=1;
+    blockHeight=Math.floor($.height/16);
+    if(blockHeight%2==0)blockHeight+=2;else blockHeight+=1;
+    steveWhere=[blockWidth/2,blockHeight/2];
+    disarray=[];
+    var _bitmapd=Bitmap.createBitmapData(blockWidth*16,blockHeight*16,true,0x00ffffff);
+    dismap.bitmapData=_bitmapd;
+    var _rect=Bitmap.createRectangle(0,0,16,16);
+    for(var indexy=0;indexy!=blockHeight;++indexy){
+        for(var indexx=0;indexx!=blockWidth;++indexx){
+            var _id=getId(steve.x-blockWidth/2+indexx,steve.y-blockHeight/2+indexy);
+            disarray[indexy*blockWidth+indexx]=_id;
+            if(_id==block0)
+                continue;
+            var _bmd=$G._get("bmd_block"+_id);/*
+            dismap[indexy*blockWidth+indexx]=Bitmap.createBitmap({bitmapData:_bmd,smoothing:false,lifeTime:0});
+            (dismap[indexy*blockWidth+indexx]).setParent(blockcanvas);
+            dismap[indexy*blockWidth+indexx].visible=true;
+            (dismap[indexy*blockWidth+indexx]).transform.matrix3D=null;
+            dismap[indexy*blockWidth+indexx].x=16*indexx;
+            dismap[indexy*blockWidth+indexx].y=16*blockHeight-16-16*indexy;*/
+            var _point=$.createPoint(indexx*16,blockHeight*16-16-16*indexy);
+            (dismap.bitmapData).copyPixels(_bmd,_rect,_point);
+        }
+    }
+    var headdata=$G._get("steve_head");
+    var head=Bitmap.createBitmapData(16,16,false,0xffffff);
+    for(var heady=0;heady!=16;++heady){
+        for(var headx=0;headx!=16;++headx){
+            head.setPixel(headx,heady,0xff000000+headdata[heady*16+headx]);
+        }
+    }
+    var stevex=steveWhere[0];
+    var stevey=steveWhere[1];
+    var _stevepoint=$.createPoint(stevex*16,blockHeight*16-16-16*stevey);
+    (dismap.bitmapData).copyPixels(head,_rect,_stevepoint);
+}
+function dis_second(){
+    var _rect=Bitmap.createRectangle(0,0,16,16);
+    for(var indexy=0;indexy!=blockHeight;++indexy){
+        for(var indexx=0;indexx!=blockWidth;++indexx){
+            var _id=getId(steve.x-blockWidth/2+indexx,steve.y-blockHeight/2+indexy);
+            var _point=$.createPoint(indexx*16,blockHeight*16-16-16*indexy);
+            /*if(_id==block0){
+                    continue;
+            }*/
+            if(disarray[indexy*blockWidth+indexx]==_id)continue;
+            else{
+                if(disarray[indexy*blockWidth+indexx]==block0){
+                    (dismap.bitmapData).copyChannel($G._get("bmd_block"+_id),_rect,_point,8,8);
+                }
+                disarray[indexy*blockWidth+indexx]=_id;
+            }
+            if(_id==block0){
+                    (dismap.bitmapData).copyChannel($G._get("bmd_block"+block0),_rect,_point,8,8);
+                    continue;
+            }
+            var _bmd=$G._get("bmd_block"+_id);
+            (dismap.bitmapData).copyPixels(_bmd,_rect,_point);
+        }
+    }
+    var headdata=$G._get("steve_head");
+    var head=Bitmap.createBitmapData(16,16,false,0xffffff);
+    for(var heady=0;heady!=16;++heady){
+        for(var headx=0;headx!=16;++headx){
+            head.setPixel(headx,heady,0xff000000+headdata[heady*16+headx]);
+        }
+    }
+    var stevex=steveWhere[0];
+    var stevey=steveWhere[1];
+    var _stevepoint=$.createPoint(stevex*16,blockHeight*16-16-16*stevey);
+    (dismap.bitmapData).copyPixels(head,_rect,_stevepoint);
+}
+
+var log_can=true;
+
+/*
+*Log system
+*/
+
+/*var logcanvas=$.createCanvas({lifeTime:0,parent,canvas});*/
+/*log_canvas.transform.matrix3D=null;*/
+var log_all=[];
+function log_oldup(){
+for(var indexl=0;indexl!=log_all.length;++indexl)
+    log_all[indexl].y-=18;
+}
+
+function log(text){
+    if(log_can){
+    log_oldup();
+    var new_comment=$.createComment(text,{lifeTime:5.0,x:10,y:$.height-36,fontsize:18,color:0xffffff,font:"system",
+                                            parent:logcanvas,motion:{alpha:{fromValue:1.0,toValue:0.0,lifeTime:1.5,startDelay:3500}}});
+    new_comment.filters=null;
+    new_comment.bold=false;
+    log_all[log_all.length]=new_comment;
+    }
+}
+
+function loadResourse_in(blockindex){
+    var _bmdblock=Bitmap.createBitmapData($.height,$.height,false,0xffffffff);
+    var _bmd=$G._get("bmd_"+blockindex);
+    for(var xindex=0;xindex!=16;++xindex){
+        for(var yindex=0;yindex!=16;++yindex){
+            /*var rect=Bitmap.createRectangle(yindex*$.height/16,xindex*$.height/16,$.height/16,$.height/16);*/
+            _bmdblock.setPixel(yindex,xindex,0xff000000+_bmd[xindex*16+yindex]);
+        }
+    }
+    $G._set("bmd_block"+blockindex,_bmdblock);
+
+    var s_bmdblock=Bitmap.createBitmapData(32,32,false,0xffffffff);
+    var s_bmd=$G._get("bmd_"+blockindex);
+    for(var xindexs=0;xindexs!=16;++xindexs){
+        for(var yindexs=0;yindexs!=16;++yindexs){
+            var srect=Bitmap.createRectangle(2*yindexs,xindexs*2,2,2);
+            s_bmdblock.fillRect(srect,0xff000000+s_bmd[xindexs*16+yindexs]);
+        }
+    }
+    $G._set("bmd_blocks"+blockindex,s_bmdblock);
+}
+function loadBlock(){
+    log("方块材质加载中...");
+    var block0r=Bitmap.createBitmapData(16,16,true,0x00ffffff);
+    $G._set("bmd_block"+0,block0r);
+    for(var index=0;index!=blockbuild.length;++index)
+        loadResourse_in(blockbuild[index]);
+    log("材质加载完成");
+}
+
+/*
+*keyboard
+*/
+var flying=true;
+var UP_d=38;var UP_u=381;
+var Down=40;
+var Left=37;var Right=39;var Wk=87;var Ak=65;var Sk=83;var Dk=68;
+var End=35;var Home=36;
+var keykeep=[];
+for(var indexk=0;indexk!=10;++indexk)keykeep[indexk]={key:0,time:0};
+
+function keyDown(keyCode)
+{
+if(keyCode==35)/*End*/
+{
+    $G._set("MC_mousein",!$G._get("MC_mousein"));
+    Player.pause();
+    while(pausecanvas.numChildren>0){
+        pausecanvas.removeChildAt(0);
+    }
+    pausecanvas.visible=true;
+    var bg=$.createShape({parent:pausecanvas,lifeTime:0,alpha:0.5});
+    bg.graphics.beginFill(0x000000);
+    bg.graphics.drawRect(-2,-2,$.width+4,$.height+4);
+    bg.graphics.endFill();
+
+    var blocktext;
+     if(steve.blockhold==blocknormal)
+            blocktext="方块类型 : "+"普通人";
+    else if(steve.blockhold==blockbear)
+            blocktext="方块类型 : "+"熊孩子";
+    else if(steve.blockhold==blockbuild)
+            blocktext="方块类型 : "+"建筑党";
+    createMCButton($.width/2-200,$.height/2-8-40,400,40,blocktext,function(comment){
+                    if(steve.blockhold==blocknormal){
+                        comment.text="方块类型 : "+"建筑党";
+                        steve.blockhold=blockbuild;
+                        steve.in_hand=steve.blockhold.length-1;
+                        for(var indexb=0;indexb!=9;++indexb){
+                            var useblock=Math.random()*(steve.blockhold.length-1);
+                            steve.blank[indexb]=Math.round(useblock);
+                        }display_blank();
+                   }
+                   else if(steve.blockhold==blockbear){
+                        comment.text="方块类型 : "+"普通人";
+                        steve.blockhold=blocknormal;
+                        steve.in_hand=steve.blockhold.length-1;
+                        for(var indexb=0;indexb!=9;++indexb){
+                            var useblock=Math.random()*(steve.blockhold.length-1);
+                            steve.blank[indexb]=Math.round(useblock);
+                        }display_blank();
+                   }
+                   else if(steve.blockhold==blockbuild){
+                        comment.text="方块类型 : "+"熊孩子";
+                        steve.blockhold=blockbear;
+                        steve.in_hand=steve.blockhold.length-1;
+                        for(var indexb=0;indexb!=9;++indexb){
+                            var useblock=Math.random()*(steve.blockhold.length-1);
+                            steve.blank[indexb]=Math.round(useblock);
+                        }display_blank();
+                   }
+    },pausecanvas);
+    createMCButton($.width/2-200,$.height/2+8,400,40,"左下提醒 :"+(log_can?"是":"否"),function(comment){
+                    log_can=!log_can;
+                    comment.text="左下提醒 :"+(log_can?"是":"否");
+    },pausecanvas);
+    createMCButton($.width/2-200,$.height/2+8+40+32,400,40,"返回",function(){
+                    pausecanvas.visible=false;
+                    $G._set("MC_mousein",!$G._get("MC_mousein"));
+                    Player.play();
+    },pausecanvas);
+    return ;
+}
+if($G._get("MC_mousein"))
+{
+    log("按键");
+    if(keyCode==37)/*Left*/
+    {
+        --steve.in_hand;
+        if(steve.in_hand<0)steve.in_hand=holdblock.length-1;
+        display_blank();
+    }
+    else if(keyCode==39)/*Right*/
+    {
+        ++steve.in_hand;
+        if(steve.in_hand>(holdblock.length-1))steve.in_hand=0;
+        display_blank();
+    }
+    else if(keyCode==96){/* 0 */
+        steve.select=!steve.select;
+        display_blank();
+    }
+    else if(keyCode>96&&keyCode<106){/* 1~9 */
+        if(steve.select==true)steve.blank[keyCode-96-1]=steve.in_hand;
+        else steve.blank_point=keyCode-96-1;
+        display_blank();
+    }
+else if(keyCode==87){/*W w*/
+    /*existblock*/
+    if(!existblock(steve.x,steve.y+1))
+    {steve.y+=1;if(steve.y>worldY){steve.y=worldY;}dis_second();}
+}
+else if(keyCode==83){/*S s*/
+    if(!existblock(steve.x,steve.y-1))
+    {steve.y-=1;if(steve.y<0){steve.y=0;}dis_second();}
+}
+else if(keyCode==65){/*A a*/
+    if(!existblock(steve.x-1,steve.y))
+    {steve.x-=1;if(steve.x>worldX){steve.x=0;}dis_second();}
+}
+else if(keyCode==68)/*D d*/
+    if(!existblock(steve.x+1,steve.y))
+    {steve.x+=1;if(steve.x<0){steve.x=worldX;}dis_second();}
+}
+
+}
+
+/*
+*Mouse
+*/
+
+var building=false;
+
+function mouseDown(event){
+if($G._get("MC_mousein")){
+    var clickx=event.localX;
+    var clicky=event.localY;
+    var selectx=Math.floor(clickx/16);
+    var selecty=Math.floor((blockHeight*16-clicky)/16);
+    var blockx=steve.x-blockWidth/2+selectx;
+    var blocky=steve.y-blockHeight/2+selecty;
+    if(getId(blockx,blocky)==block0){
+        steve.putblock(blockx,blocky);
+        dis_second();
+    }
+    else {
+        destroyBlock(blockx,blocky);
+        dis_second();
+    }
+}
+}
+
+var olddanmu=0;
+for(var danmuindex=0;danmuindex!=Player.commentList.length;++danmuindex){
+    if(Player.commentList[danmuindex].danmuId>olddanmu&&Player.commentList[danmuindex].mode!=8)
+        olddanmu=Player.commentList[danmuindex].danmuId;
+}
+function zhibo(){
+    var display_danmu=[];
+    for(var index1=0;index1!=Player.commentList.length;++index1){
+        if(Player.commentList[index1].danmuId>olddanmu&&Player.commentList[index1].mode!=8){
+            display_danmu[display_danmu.length]={id:Player.commentList[index1].danmuId,text:Player.commentList[index1].text,
+                                                                                color:Player.commentList[index1].color};
+        }
+    }
+    for(var index2=0;index2!=display_danmu.length;++index2){
+    if(display_danmu[index2].id>olddanmu)
+        olddanmu=display_danmu[index2].id;
+    }
+    for(var index3=0;index3!=display_danmu.length;++index3)
+        display_zhibo(display_danmu[index3]);
+}
+function display_zhibo(comment){
+    var space=[];
+    space.length=$.height-2-2/20;
+    for(var index1=0;index1!=space.length;++index1)
+        space[index1]=true;
+    for(var child1=0;child1!=danmucanvas.numChildren;++child1){
+        var childtemp=danmucanvas.getChildAt(child1);
+        if(childtemp.x<$.width&&childtemp.x+childtemp.textWidth>$.height){
+            space[(childtemp.y-2)/20]=false;
+        }
+    }
+    var _comment_y=-1;
+    for(var index2=0;index2!=space.length;++index2){
+        if(space[index2]==true){
+        _comment_y=index2*20+2;
+        break;}
+    }
+    if(_comment_y==-1)
+        _comment_y=0;
+    var tempcomment=$.createComment(comment.text,{parent:danmucanvas,x:$.width+4,y:_comment_y,lifeTime:4.0,fontsize:20});
+    var realcomment=$.createComment(comment.text,{parent:danmucanvas,x:$.width+4,y:_comment_y,lifeTime:4.0,fontsize:20,color:comment.color,
+                                    motion:{x:{fromValue:$.width+4,toValue:0-tempcomment.textWidth,lifeTime:4.0}} });
+    tempcomment.visible=false;
+}
+$.root.addEventListener("enterFrame",zhibo);
+$.root.addEventListener("added",function(e){
+if(e.target.constructor=="[class ScrollComment]"){
+        e.target.alpha=0.0;
+    }
+});
+
+/*
+*BGM control
+*/
+var _starttime=10.0*1000;
+var _endtime=19.0*60.0*1000;
+function bgmcontrol(){
+    interval(function(){
+                if(Player.time>_endtime-1000)
+                    Player.seek(_starttime);
+    },100,0);
+}
+bgmcontrol();
+
+/*
+*MC button interface
+*/
+
+function createMCButton(_x,_y,_width,_height,_text,_onclick,_canvas){
+    var _bmd=Bitmap.createBitmapData(_width,_height,false,0xff6f6f6f);
+    var _rect1=Bitmap.createRectangle(0,0,_width,2);
+    _bmd.fillRect(_rect1,0xff000000);
+    var _rect2=Bitmap.createRectangle(0,0,2,_height);
+    _bmd.fillRect(_rect2,0xff000000);
+    var _rect3=Bitmap.createRectangle(0,_height-2,_width,2);
+    _bmd.fillRect(_rect3,0xff000000);
+    var _rect4=Bitmap.createRectangle(_width-2,0,2,$.height);
+    _bmd.fillRect(_rect4,0xff000000);
+    var _rect5=Bitmap.createRectangle(2,2,_width-2-2,2);
+    _bmd.fillRect(_rect5,0xffaaaaaa);
+    var _rect6=Bitmap.createRectangle(2,2,2,_height-2-4);
+    _bmd.fillRect(_rect6,0xffaaaaaa);
+    var _rect7=Bitmap.createRectangle(2,_height-6,_width-6,4);
+    _bmd.fillRect(_rect7,0x565656);
+    var _rect8=Bitmap.createRectangle(_width-4,4,2,_height-6);
+    _bmd.fillRect(_rect8,0x565656);
+    var _rect9=Bitmap.createRectangle(2,_height-6,2,4);
+    _bmd.fillRect(_rect9,0x6d6d6d);
+    var _rect10=Bitmap.createRectangle(_width-4,2,2,2);
+    _bmd.fillRect(_rect10,0x6d6d6d);
+    var _bitmap=Bitmap.createBitmap({bitmapData:_bmd,lifeTime:0});
+    _bitmap.setParent(_canvas);
+    _bitmap.x=_x;
+    _bitmap.y=_y;
+    var _textFShadow=$.createComment(_text,{lifeTime:0,font:"system",color:0x000000,parent:_canvas});
+    _textFShadow.transform.matrix3D=null;
+    _textFShadow.filters=null;
+    _textFShadow.x=_x+_width/2-_textFShadow.textWidth/2;
+    _textFShadow.y=_y+_height/2-_textFShadow.textHeight/2;
+    var _textF=$.createComment(_text,{lifeTime:0,font:"system",color:0xffffff,parent:_canvas});
+    _textF.transform.matrix3D=null;
+    _textF.filters=null;
+    _textF.x=_x+_width/2-_textF.textWidth/2-2;
+    _textF.y=_y+_height/2-_textF.textHeight/2-2;
+    var _buttonF=$.createButton({lifeTime:0,width:_width,height:_height,alpha:0.0,onclick:function(){_onclick(_textF);},text:"",parent:_canvas});
+    _buttonF.transform.matrix3D=null;
+    _buttonF.x=_x;
+    _buttonF.y=_y;
+}
+
+function option(){
+    log("选项启动");
+    maincanvas.visible=false;
+    while(optioncanvas.numChildren>0)
+        optioncanvas.removeChildAt(0);
+    optioncanvas.visible=true;
+    var _bgarray=$G._get("opbg");
+    var _bgdata=Bitmap.createBitmapData(64,64,false,0xfafafa);
+    for(var index1=0;index1!=16;index1++){
+        for(var index2=0;index2!=16;++index2){
+            _bgdata.fillRect(Bitmap.createRectangle(index2*4,index1*4,4,4),_bgarray[index1*16+index2]+0xff000000);
+        }
+    }
+    for(var index3=0;index3!=1024/64;++index3){
+        for(var index4=0;index4!=2048/64;++index4){
+            var _bitmap=Bitmap.createBitmap({bitmapData:_bgdata,smoothing:false,lifeTime:0});
+            _bitmap.transform.matrix3D=null;
+            _bitmap.setParent(optioncanvas);
+            _bitmap.x=index4*64;
+            _bitmap.y=index3*64;
+        }
+    }
+    var blocktext;
+     if(holdblock==blocknormal)
+            blocktext="方块类型 : "+"普通人";
+    else if(holdblock==blockbear)
+            blocktext="方块类型 : "+"熊孩子";
+    else if(holdblock==blockbuild)
+            blocktext="方块类型 : "+"建筑党";
+    createMCButton($.width/2-200,$.height/2-20-16-40,400,40,blocktext,function(comment){
+                    if(holdblock==blocknormal){
+                        comment.text="方块类型 : "+"建筑党";
+                        holdblock=blockbuild;
+                   }
+                   else if(holdblock==blockbear){
+                        comment.text="方块类型 : "+"普通人";
+                        holdblock=blocknormal;
+                   }
+                   else if(holdblock==blockbuild){
+                        comment.text="方块类型 : "+"熊孩子";
+                        holdblock=blockbear;
+                   }
+    },optioncanvas);
+    createMCButton($.width/2-200,$.height/2-20,400,40,"左下提醒 :"+(log_can?"是":"否"),function(comment){
+                    log_can=!log_can;
+                    comment.text="左下提醒 :"+(log_can?"是":"否");
+    },optioncanvas);
+    createMCButton($.width/2-200,$.height/2+20+16,400,40,"生成矿产 :"+(mine_can?"是":"否"),function(comment){
+                    mine_can=!mine_can;
+                    comment.text="生成矿产 :"+(mine_can?"是":"否");
+    },optioncanvas);
+    createMCButton($.width/2-200,$.height/2+20+16+40+32,400,40,"返回",function(){
+                    optioncanvas.visible=false;
+                    maincanvas.visible=true;
+    },optioncanvas);
+}
+
+function ceilxyz(cx,cy)
+{
+    var func=function(num)
+    {
+        var mininum=Math.floor(num);
+        var maxinum=Math.ceil(num);
+        if(num<(mininum+0.5))
+            return mininum;
+        else return maxinum;
+    };
+    return [func(cx),func(cy)];
+}
+
+function existblock(ex,ey)
+{
+    /*if(worldbase[ey]==block0)
+    {
+        for(var ei=0;ei!=worldextra.length;++ei)
+        {
+            if(worldextra[ei].x==ex&&worldextra[ei].y==ey)
+            {
+                if(worldextra[ei].id!=block0)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    else
+    {
+        for(var ei=0;ei!=worldextra.length;++ei)
+        {
+            if(worldextra[ei].x==ex&&worldextra[ei].y==ey)
+            {
+                if(worldextra[ei].id==block0)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }*/
+    if(getId(ex,ey)==block0)
+        return false;
+    else return true;
+}
+
+function addBlock(ax,ay,aid)
+{
+    /*var arxyz=ceilxyz(ax,ay,az);
+    ax=arxyz[0];ay=arxyz[1];az=arxyz[2];*/
+    if(ax>worldX)ax=ax-worldX;
+    if(ax<0)ax=ax+worldX;
+    if(ay>worldY)ay=ay-worldY;
+    if(ay<0)ay=ay+worldY;
+    if(aid==block46)Tntboom(ax,ay);
+    for(var index1=0;index1!=worldextra.length;++index1){
+        if(worldextra[index1].x==ax&&worldextra[index1].y==ay){
+            worldextra[index1].id=aid;
+            return;
+        }
+    }
+    var newblock={
+    x:ax,
+    y:ay,
+    id:aid
+    };
+    worldextra[worldextra.length]=newblock;
+}
+
+function destroyBlock(dx,dy)
+{
+    /*var arxyz=ceilxyz(dx,dy,dz);
+    dx=arxyz[0];dy=arxyz[1];dz=arxyz[2];*/
+    if(dx>worldX)dx=dx-worldX;
+    if(dx<0)dx=dx+worldX;
+    if(dy>worldY)dy=dy-worldY;
+    if(dy<0)dy=dy+worldY;
+    for(var indexd=0;indexd!=worldextra.length;++indexd)
+    {
+        if(worldextra[indexd].x==dx&&worldextra[indexd].y==dy)
+        {
+            worldextra[indexd].id=block0;
+            return ;
+        }
+    }
+    var nullblock={
+        x:dx,
+        y:dy,
+        id:block0};
+    worldextra[worldextra.length]=nullblock;
+}
+
+function getId(x,y){
+     /*var arxyz=ceilxyz(x,y,z);
+     ax=arxyz[0];ay=arxyz[1];az=arxyz[2];*/
+    if(x>worldX)x=x-worldX;
+    if(x<0)x=x+worldX;
+    if(y>worldY)y=y-worldY;
+    if(y<0)y=y+worldY;
+    for(var indexa=0;indexa!=worldextra.length;++indexa){
+        if((worldextra[indexa]).x==x&&(worldextra[indexa]).y==y){
+            return (worldextra[indexa]).id;
+        }
+    }
+    return worldbase[y];
+}
+
+function mine(){
+        log("加入矿产");
+        var num_dia=Math.floor(Math.random()*50);
+        while(num_dia>0){
+            addBlock(Math.floor(Math.random()*worldX),Math.floor(1+Math.random()*15),block56);
+            --num_dia;
+        }
+        var num_iron=Math.floor(75+Math.random()*50);
+        while(num_iron>0){
+            addBlock(Math.floor(Math.random()*worldX),Math.floor(1+Math.random()*(landline-8)),block15);
+            --num_iron;
+        }
+        var num_au=Math.floor(50+Math.random()*25);
+        while(num_au>0){
+            addBlock(Math.floor(Math.random()*worldX),Math.floor(1+Math.random()*(landline-16)),block14);
+            --num_au;
+        }
+        var num_coal=Math.floor(100+Math.random()*150);
+        while(num_coal>0){
+            addBlock(Math.floor(Math.random()*worldX),Math.floor(1+Math.random()*(landline-5)),block16);
+            --num_coal;
+        }
+}
+
+function createWorld(sizeX,sizeY)
+{
+    log("创造世界中...");
+    var x=0,y=0;
+    worldX=sizeX;
+    worldY=sizeY;
+    log("创造基础世界...");
+    worldbase[0]=block7;
+    for(var indexa=0;indexa!=landline-3;++indexa)
+        worldbase[indexa]=block1;
+    for(var indexb=landline-3;indexb!=landline-1;++indexb)
+        worldbase[indexb]=block3;
+    worldbase[landline-1]=block2;
+    for(var indexc=landline;indexc!=(sizeY+64);++indexc)
+        worldbase[indexc]=block0;
+    for(var indexd=-1;indexd!=-landline;--indexd)
+        worldbase[indexd]=block0;
+    if(mine_can){
+        log("世界进行扩展...");
+        mine();
+    }
+    log("世界创造完成");
+    Global._set("MC_state","playing");
+    Global._set("MC_mousein",true);
+}
+
+function Tntboom(x,y){
+timer(function(){
+if(getId(x,y)==block46){
+        destroyBlock(x,y);
+        destroyBlock(x-1,y-1);
+        destroyBlock(x-1,y);
+        destroyBlock(x-1,y+1);
+        destroyBlock(x,y+1);
+        destroyBlock(x,y-1);
+        destroyBlock(x+1,y-1);
+        destroyBlock(x+1,y);
+        destroyBlock(x+1,y+1);
+        dis_second();
+        log("Boom!");
+      }
+},3000);
+}
+
+function createSteve()
+{
+    log("创造人物中...");
+    steve.x=worldX/2;
+    steve.y=landline;
+    log("位置设置完成");
+    steve.health=20;
+    steve.hunger=20;
+    steve.equipment=0;
+    steve.blockhold=holdblock;
+    steve.in_hand=steve.blockhold.length-1;
+    steve.blank=[];
+    steve.blank.length=9;
+    for(var indexb=0;indexb!=9;++indexb){
+    var useblock=Math.random()*(steve.blockhold.length-1);
+    steve.blank[indexb]=Math.round(useblock);
+    }
+    steve.select=true;
+    steve.blank_point=0;
+    steve.putblock=function(sx,sy)
+    {
+            if(steve.select==true){var handin=steve.in_hand;
+            addBlock(sx,sy,steve.blockhold[handin]);}
+            else{var blankp=steve.blank_point;var selected=steve.blank[blankp];
+            addBlock(sx,sy,steve.blockhold[selected]);}
+            return ;
+    };
+    log("人物属性设置完成");
+    Global._set("MC_steve",steve);
+    log("人物创造完成");
+}
+
+var time=450;
+
+function timeloop()
+{   log("时间引擎启动");
+    interval(function()
+             {
+                 ++time;
+                 Global._set("MC_time",time);
+             },100,0);
+}
+var nowheight=$.height;
+function texture(){
+    loadBlock();
+    interval(function(){
+                if($.height==nowheight)
+                    return;
+                else {nowheight=$.height;dis_first();display_blank();}
+    },100,0);
+}
+var mostcolor={
+r:0x7e,
+g:0xba,
+b:0xff
+};
+var _backdata;
+var _background;
+var nowcolor;
+var backHeight=$.height;
+function init_back(){
+    _backdata=Bitmap.createBitmapData($.width,$.height,false,0xff000000);
+    _background=Bitmap.createBitmap({bitmapData:_backdata,lifeTime:0,smoothing:false});
+    _background.transform.matrix3D=null;
+    _background.setParent(backgroundcanvas);
+}
+function background(){
+    interval(function(){
+    var _time=$G._get("MC_time")%(1800);
+    if($.height!=backHeight){
+        _backdata=Bitmap.createBitmapData($.width,$.height,false,0xff000000);
+        if(_time>1400||_time<400){
+            nowcolor=0x000000;
+        _backdata.fillRect(_backdata.rect,nowcolor);
+        var star=Math.round(Math.random()*120);
+            while(star>0){
+            var starx=Math.round(Math.random()*$.width);
+            var stary=Math.round($.height*Math.random());
+            _backdata.setPixel(starx,stary,0xffffffff);
+            _backdata.setPixel(starx-1,stary,0xffffffff);
+            _backdata.setPixel(starx+1,stary,0xffffffff);
+            _backdata.setPixel(starx,stary-1,0xffffffff);
+            _backdata.setPixel(starx,stary+1,0xffffffff);
+            --star;
+            }
+        }
+        if(_time>600&&time<1200){
+            nowcolor=(mostcolor.r<<16)|(mostcolor.g<<8)|(mostcolor.b);
+            _backdata.fillRect(_backdata.rect,nowcolor);
+        }
+        _background.bitmapData=_backdata;
+        backHeight=$.height;
+    }
+    if(_time>1400&&_time<=1410){
+        nowcolor=0x000000;
+        _backdata.fillRect(_backdata.rect,nowcolor);
+        var star=Math.round(Math.random()*120);
+        while(star>0){
+            var starx=Math.round(Math.random()*$.width);
+            var stary=Math.round($.height*Math.random());
+            _backdata.setPixel(starx,stary,0xffffffff);
+            _backdata.setPixel(starx-1,stary,0xffffffff);
+            _backdata.setPixel(starx+1,stary,0xffffffff);
+            _backdata.setPixel(starx,stary-1,0xffffffff);
+            _backdata.setPixel(starx,stary+1,0xffffffff);
+            --star;
+        }
+    }
+    else if(_time>400&&_time<=600){
+        var _rate=(_time-400.0)/200;
+        nowcolor=(mostcolor.r*_rate<<16)|(mostcolor.g*_rate<<8)|(mostcolor.b*_rate);
+        _backdata.fillRect(_backdata.rect,nowcolor);
+    }
+    else if(_time>1200&&_time<=1400){
+        var _rate=(1400.0-_time)/200;
+        nowcolor=(mostcolor.r*_rate<<16)|(mostcolor.g*_rate<<8)|(mostcolor.b*_rate);
+        _backdata.fillRect(_backdata.rect,nowcolor);
+    }
+    },500,0);
+}
+
+function gamestart(){
+maincanvas.visible=false;
+optioncanvas.visible=false;
+Player.seek(10*1000);
+Player.play();
+createWorld(512,128);
+createSteve();
+texture();
+Player.keyTrigger(keyDown,0xffffff);
+log("键盘就位");
+$.root.mouseEnabled=true;
+$.root.addEventListener("mouseDown",mouseDown);
+log("鼠标就位");
+timeloop();
+log("加载背景中...");
+init_back();
+background();
+log("加载背景完成");
+log("显示方块中...");
+init_dis();
+dis_first();
+log("显示方块完成");
+log("显示用户UI中...");
+display_blank();
+log("显示用户UI完成");
+trace("开始游戏√");
+}
+
+function startUI(){
+    while(maincanvas.numChildren>0){
+        maincanvas.removeChildAt(0);
+    }
+    log("加载开始界面中");
+    var _bgarray=$G._get("bg1");var _bgdata=Bitmap.createBitmapData(256,256,false,0xfafafa);
+    for(var index1=0;index1!=256;++index1){
+        for(var index2=0;index2!=256;++index2){
+            _bgdata.setPixel(index2,index1,_bgarray[index1*256+index2]);
+        }
+    }
+    var _bgbmp=Bitmap.createBitmap({bitmapData:_bgdata,smoothing:true,scale:5.0,lifeTime:0});
+    _bgbmp.setParent(maincanvas);
+    _bgbmp.x=0-Math.round(Math.random()*300+100);
+    _bgbmp.y=0-Math.round(Math.random()*300+100);
+    var _title=Bitmap.createBitmap({bitmapData:$G._get("minecraft_logo"),smoothing:false,lifeTime:0});
+    _title.setParent(maincanvas);
+    _title.transform.matrix3D=null;
+    _title.x=$.width/2-288/2;
+    _title.y=60;
+    var warning=$.createComment("  由于改动太大\n玩法请看评论区",{lifeTime:0,parent:maincanvas,color:0xffff00,fontsize:18,font:"system"});
+    warning.filters=null;
+    warning.x=$.width/2+288/4-20;
+    warning.y=60+48+8;
+    warning.rotationZ=-30;
+    createMCButton($.width/2-200,$.height/2-20-16-40,400,40,"单人游戏",gamestart,maincanvas);
+    createMCButton($.width/2-200,$.height/2-20,400,40,"多人游戏",function(){},maincanvas);
+    createMCButton($.width/2-200,$.height/2+20+16,400,40,"选项",option,maincanvas);
+    log("开始界面加载完成");
+    Player.pause();
+}
+
+startUI();
+/*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*         /\            /\                    ,  _
+*        /  \          /  \                /        `
+*       /    \        /    \             /
+*      /      \      /      \           (
+*     /        \    /        \           \
+*    /          \  /          \            \         ,
+*   /            \/            \              `   ~
+*我知道你想看源码23333
+*不过我机智的避开了2333
+*当然也是强迫症（凑够1000行
+*
+*第二届弹幕大赛作品 - -by 众人
+*/

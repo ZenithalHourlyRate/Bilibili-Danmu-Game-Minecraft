@@ -1,0 +1,164 @@
+/*var blockcanvas=$.createCanvas({lifeTime:0,parent:canvas});
+var blankcanvas=$.createCanvas({lifeTime:0,parent:canvas});*/
+
+function steve_see(x,y,z){
+    var stee_x;var stee_y;var stee_z;
+    var xylong=Math.pow(Math.pow(Math.abs(x-steve.x),2)+Math.pow(Math.abs(y-steve.y),2),0.5);
+    var xyangle=Math.atan2(y-steve.y,x-steve.x)/(Math.PI*2.0)*360.0;
+    if(xyangle<0)xyangle=360.0+xyangle;
+    var xyallgel=steve.see[0]-xyangle;
+    var xyall_xuan=xyallgel/360.0*2.0*Math.PI;
+        if(xyallgel>=0&&xyallgel<90){
+            stee_x=xylong*Math.sin(xyall_xuan);
+            stee_y=xylong*Math.cos(xyall_xuan);
+        }
+        else if(xyallgel>=90&&xyallgel<180){
+            stee_x=xylong*Math.cos(xyall_xuan-0.5*Math.PI);
+            stee_y=-xylong*Math.sin(xyall_xuan-0.5*Math.PI);
+        }
+        else if(xyallgel>=180&&xyallgel<270){
+            stee_x=-xylong*Math.sin(xyall_xuan-Math.PI);
+            stee_y=-xylong*Math.cos(xyall_xuan-Math.PI);
+        }
+        else if(xyallgel>=270&&xyallgel<360){
+            stee_x=-xylong*Math.cos(xyall_xuan-1.5*Math.PI);
+            stee_y=xylong*Math.sin(xyall_xuan-1.5*Math.PI);
+        }
+        else if(xyallgel>=-90&&xyallgel<0){
+            stee_x=-xylong*Math.sin(Math.abs(xyall_xuan));
+            stee_y=xylong*Math.cos(Math.abs(xyall_xuan));
+        }
+        else if(xyallgel>=-180&&xyallgel<-90){
+            stee_x=-xylong*Math.cos(Math.abs(xyall_xuan+0.5*Math.PI));
+            stee_y=-xylong*Math.sin(Math.abs(xyall_xuan+0.5*Math.PI));
+        }
+        else if(xyallgel>=-270&&xyallgel<-180){
+            stee_x=xylong*Math.sin(Math.abs(xyall_xuan+Math.PI));
+            stee_y=-xylong*Math.cos(Math.abs(xyall_xuan+Math.PI));
+        }
+        else if(xyallgel>=-360&&xyallgel<-270){
+            stee_x=xylong*Math.cos(Math.abs(xyall_xuan+1.5*Math.PI));
+            stee_y=xylong*Math.sin(Math.abs(xyall_xuan+1.5*Math.PI));
+        }
+    var yzlong=Math.pow(Math.pow(Math.abs(z-steve.z),2)+Math.pow(Math.abs(stee_y),2),0.5);
+    var yzangle=Math.atan2(z-steve.z,stee_y)/(Math.PI*2.0)*360.0;
+    var yzallgel=steve.see[2]-yzangle;
+    var yzall_xuan=yzallgel/360.0*2.0*Math.PI;
+    if(yzallgel>=0&&yzallgel<90){
+        stee_y=yzlong*Math.cos(yzall_xuan);
+        stee_z=-yzlong*Math.sin(yzall_xuan);
+    }
+    else if(yzallgel>=90&&yzallgel<180){
+        stee_y=-yzlong*Math.sin(yzall_xuan-0.5*Math.PI);
+        stee_z=-yzlong*Math.cos(yzall_xuan-0.5*Math.PI);
+    }
+    else if(yzallgel>=-90&&yzallgel<0){
+        stee_y=yzlong*Math.cos(Math.abs(yzall_xuan));
+        stee_z=yzlong*Math.sin(Math.abs(yzall_xuan));
+    }
+    else if(yzallgel>=-180&&yzallgel<-90){
+        stee_y=-yzlong*Math.sin(Math.abs(yzall_xuan+0.5*Math.PI));
+        stee_z=yzlong*Math.cos(Math.abs(yzall_xuan+0.5*Math.PI));
+    }
+    return [stee_x,stee_y,stee_z];
+}
+
+function sortChild(canvas){
+    for(var index=0;index!=canvas.numChildren-1;++index){
+    for(var indexa=index+1;indexa!=canvas.numChildren;++indexa){
+	var temp1=canvas.getChildAt(indexa);
+	var temp2=canvas.getChildAt(index);
+        if(temp1.z>=temp2.z){
+		canvas.setChildIndex(temp1,index);
+		canvas.setChildIndex(temp2,indexa);
+	}
+    }
+}
+}
+
+function can_be_see(x,y,z){
+    if(getId(x,y,z)==block0)
+        return false;
+    else{
+    if( getId(x+1,y,z)==block0||getId(x-1,y,z)==block0
+       ||getId(x,y+1,z)==block0||getId(x,y-1,z)==block0
+       ||getId(x,y,z+1)==block0||getId(x,y,z-1)==block0 )
+        return true;
+    else return false;
+    }
+}
+
+function show_screen(stee_x,stee_y,stee_z,id){
+    if(stee_y<0)return ;
+    stee_z+=1;
+    var bitmap=Bitmap.createBitmap({bitmapData:$G._get("bmd_block"+id),smoothing:false,lifeTime:0});
+    bitmap.setParent(blockcanvas);
+    bitmap.x=$.width/2+$.height*stee_x-0.5*$.height;
+    bitmap.y=$.height/2-$.height*stee_z-0.5*$.height;
+    bitmap.z=stee_y*$.height;
+    sortChild(blockcanvas);
+}
+
+function show_blank(){
+    while(blankcanvas.numChildren>0){
+        blankcanvas.removeChildAt(0);
+    }
+    var _plus=$.createComment("+",{fontsize:36,parent:blankcanvas,lifeTime:0});
+    _plus.transform.matrix3D=null;
+    _plus.x=$.width/2-_plus.textWidth/2;
+    _plus.y=$.height/2-_plus.textHeight/2;
+    var _blank=$.createShape({parent:blankcanvas,lifeTime:0});
+    _blank.transform.matrix3D=null;
+    _blank.graphics.lineStyle(5,0xff5d5d5d,1.0,true,"none","none","bevel");
+    for(var index1=0;index1!=9;index1++){
+        _blank.graphics.drawRect($.width/2-4.5*40+index1*40,$.height-5-40,$.width/2-4.5*40+index1*40+40,$.height-5);
+    }
+    if(!steve.select){
+        _blank.graphics.lineStyle(7,0xffa1b29d,1.0,true,"none","none","bevel");
+        _blank.graphics.drawRect($.width/2-4.5*40+steve.blank_point*40,$.height-5-40,$.width/2-4.5*40+steve.blank_point*40+40,$.height-5);
+    }
+        _blank.graphics.endFill();
+    var _bmd=[];_bmd.length=9;
+    var _bitmap=[];_bitmap.length=9;
+    for(var index2=0;index2!=9;++index2){
+        _bmd[index2]=$G._get("bmd_blocks"+steve.blank[index2]);
+        _bitmap[index2].setParent(blankcanvas);
+        _bitmap[index2]=Bitmap.createBitmap({bitmapData:_bmd[index2],smoothing:false});
+        _bitmap[index2].transform.matrix3D=null;
+        _bitmap[index2].x=$.width/2-4.5*40+8+40*index2;
+        _bitmap[index2].y=$.height-5-32;
+    }
+    var _hand=Bitmap.createBitmap({bitmapData:$G._get("bmd_blocks"+steve.blockhold[steve.in_hand]),smoothing:false,lifeTime:0});
+    _hand.transform.matrix3D=null;
+    _hand.x=$.width/2+4.5*40+10;
+    _hand.y=$.height-5-40;
+}
+
+function display_block(){
+    while(blockcanvas.numChildren>0){
+        blockcanvas.removeChildAt(0);
+    }
+    var bg=$.createShape({lifeTime:0,parent:blockcanvas});
+    bg.graphics.beginFill(0xfafafa);
+    bg.graphics.drawRect(-2,-2,$.width+4,$.width+4);
+    bg.graphics.endFill();
+    var seerange=seerange[see_point];
+    for(var xindex=steve.x-seerange;xindex!=steve.x+seerange;++xindex){
+        for(var yindex=steve.y-seerange;yindex!=steve.y+seerange;++yindex){
+            for(var zindex=steve.z-seerange;zindex!=steve.z+seerange;++zindex){
+                if(can_be_see(xindex,yindex,zindex)){
+                    var stee_xyz=steve_see(xindex,yindex,zindex);
+                    show_screen(stee_xyz[0],stee_xyz[1],stee_xyz[2],getId(xindex,yindex,zindex));
+                }
+            }
+        }
+    }
+}
+
+function display_blank(){
+    show_blank();
+}
+
+function _3DFace(p1,p2,p3,id){
+
+}

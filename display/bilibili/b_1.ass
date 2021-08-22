@@ -1,0 +1,10 @@
+var bili_b1 =$.createShape({lifeTime:time,parent:firstcan});
+bili_b1.transform.matrix3D = null;
+bili_b1.graphics.beginFill(0x05b3fc);
+bili_b1.graphics.moveTo(433.0/1600.0*$.width,310.0/900.0*$.height);
+bili_b1.graphics.lineTo(490.0/1600.0*$.width,285.0/900.0*$.height);
+bili_b1.graphics.curveTo(488.0/1600.0*$.width,459.0/900.0*$.height,497.0/1600.0*$.width,494.0/900.0*$.height);
+bili_b1.graphics.curveTo(629.0/1600.0*$.width,489.0/900.0*$.height,640.0/1600.0*$.width,540.0/900.0*$.height);
+bili_b1.graphics.curveTo(651.0/1600.0*$.width,603.0/900.0*$.height,473.0/1600.0*$.width,613.0/900.0*$.height);
+bili_b1.graphics.curveTo(442.0/1600.0*$.width,316.0/900.0*$.height,433.0/1600.0*$.width,310.0/900.0*$.height);
+bili_b1.graphics.endFill();

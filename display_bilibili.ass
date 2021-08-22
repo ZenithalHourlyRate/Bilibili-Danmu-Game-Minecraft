@@ -1,0 +1,153 @@
+function bilibili(time)
+{
+    var canvas=$.createCanvas({lifeTime:time});
+    canvas.transform.matrix3D=null;
+    var bg=$.createShape({lifeTime:time,parent:canvas});
+    bg.transform.matrix3D=null;
+    bg.graphics.beginFill(0xffffff);
+    bg.graphics.drawRect(-2,-2,$.width+4,$.height+4);
+    bg.graphics.endFill();
+/*first bili*/
+    var bili_b1 =$.createShape({lifeTime:time,parent:canvas});
+    bili_b1.transform.matrix3D = null;
+    bili_b1.graphics.beginFill(0x05b3fc);
+    bili_b1.graphics.moveTo(433.0/1600.0*$.width,310.0/900.0*$.height);
+    bili_b1.graphics.lineTo(490.0/1600.0*$.width,285.0/900.0*$.height);
+    bili_b1.graphics.curveTo(488.0/1600.0*$.width,459.0/900.0*$.height,497.0/1600.0*$.width,494.0/900.0*$.height);
+    bili_b1.graphics.curveTo(629.0/1600.0*$.width,489.0/900.0*$.height,640.0/1600.0*$.width,540.0/900.0*$.height);
+    bili_b1.graphics.curveTo(651.0/1600.0*$.width,603.0/900.0*$.height,473.0/1600.0*$.width,613.0/900.0*$.height);
+    bili_b1.graphics.curveTo(442.0/1600.0*$.width,316.0/900.0*$.height,433.0/1600.0*$.width,310.0/900.0*$.height);
+    bili_b1.graphics.endFill();
+
+    var bili_b2 =$.createShape({lifeTime:time,parent:canvas});
+    bili_b2.transform.matrix3D = null;
+    bili_b2.graphics.beginFill(0xffffff);
+    bili_b2.graphics.moveTo(525.0/1600.0*$.width,525.0/900.0*$.height);
+    bili_b2.graphics.lineTo(583.0/1600.0*$.width,545.0/900.0*$.height);
+    bili_b2.graphics.lineTo(533.0/1600.0*$.width,583.0/900.0*$.height);
+    bili_b2.graphics.lineTo(525.0/1600.0*$.width,525.0/900.0*$.height);
+    bili_b2.graphics.endFill();
+
+    var bili_i1 =$.createShape({lifeTime:time,parent:canvas});
+    bili_i1.transform.matrix3D = null;
+    bili_i1.graphics.beginFill(0x05b3fc);
+    bili_i1.graphics.moveTo(625.0/1600.0*$.width,389.0/900.0*$.height);
+    bili_i1.graphics.lineTo(644.0/1600.0*$.width,388.0/900.0*$.height);
+    bili_i1.graphics.lineTo(650.0/1600.0*$.width,436.0/900.0*$.height);
+    bili_i1.graphics.lineTo(638.0/1600.0*$.width,438.0/900.0*$.height);
+    bili_i1.graphics.lineTo(625.0/1600.0*$.width,389.0/900.0*$.height);
+    bili_i1.graphics.moveTo(651.0/1600.0*$.width,385.0/900.0*$.height);
+    bili_i1.graphics.lineTo(669.0/1600.0*$.width,385.0/900.0*$.height);
+    bili_i1.graphics.lineTo(674.0/1600.0*$.width,434.0/900.0*$.height);
+    bili_i1.graphics.lineTo(658.0/1600.0*$.width,435.0/900.0*$.height);
+    bili_i1.graphics.lineTo(651.0/1600.0*$.width,385.0/900.0*$.height);
+    bili_i1.graphics.moveTo(637.0/1600.0*$.width,458.0/900.0*$.height);
+    bili_i1.graphics.curveTo(659.0/1600.0*$.width,450.0/900.0*$.height,676.0/1600.0*$.width,454.0/900.0*$.height);
+    bili_i1.graphics.curveTo(687.0/1600.0*$.width,499.0/900.0*$.height,691.0/1600.0*$.width,587.0/900.0*$.height);
+    bili_i1.graphics.lineTo(664.0/1600.0*$.width,591.0/900.0*$.height);
+    bili_i1.graphics.lineTo(637.0/1600.0*$.width,458.0/900.0*$.height);
+    bili_i1.graphics.endFill();
+
+    var bili_i2 =$.createShape({lifeTime:time,parent:canvas});
+    bili_i2.transform.matrix3D = null;
+    bili_i2.graphics.beginFill(0x05b3fc);
+    bili_i2.graphics.moveTo(746.0/1600.0*$.width,391.0/900.0*$.height);
+    bili_i2.graphics.lineTo(763.0/1600.0*$.width,391.0/900.0*$.height);
+    bili_i2.graphics.lineTo(763.0/1600.0*$.width,441.0/900.0*$.height);
+    bili_i2.graphics.lineTo(750.0/1600.0*$.width,441.0/900.0*$.height);
+    bili_i2.graphics.lineTo(746.0/1600.0*$.width,391.0/900.0*$.height);
+    bili_i2.graphics.moveTo(771.0/1600.0*$.width,390.0/900.0*$.height);
+    bili_i2.graphics.lineTo(789.0/1600.0*$.width,391.0/900.0*$.height);
+    bili_i2.graphics.lineTo(788.0/1600.0*$.width,440.0/900.0*$.height);
+    bili_i2.graphics.lineTo(772.0/1600.0*$.width,440.0/900.0*$.height);
+    bili_i2.graphics.lineTo(771.0/1600.0*$.width,390.0/900.0*$.height);
+    bili_i2.graphics.moveTo(751.0/1600.0*$.width,460.0/900.0*$.height);
+    bili_i2.graphics.curveTo(783.0/1600.0*$.width,455.0/900.0*$.height,789.0/1600.0*$.width,460.0/900.0*$.height);
+    bili_i2.graphics.curveTo(793.0/1600.0*$.width,470.0/900.0*$.height,791.0/1600.0*$.width,594.0/900.0*$.height);
+    bili_i2.graphics.lineTo(763.0/1600.0*$.width,594.0/900.0*$.height);
+    bili_i2.graphics.curveTo(750.0/1600.0*$.width,475.0/900.0*$.height,751.0/1600.0*$.width,460.0/900.0*$.height);
+    bili_i2.graphics.endFill();
+
+    var bili_l =$.createShape({lifeTime:time,parent:canvas});
+    bili_l.transform.matrix3D = null;
+    bili_l.graphics.beginFill(0x05b3fc);
+    bili_l.graphics.moveTo(679.0/1600.0*$.width,327.0/900.0*$.height);
+    bili_l.graphics.curveTo(712.0/1600.0*$.width,321.0/900.0*$.height,718.0/1600.0*$.width,325.0/900.0*$.height);
+    bili_l.graphics.curveTo(737.0/1600.0*$.width,569.0/900.0*$.height,739.0/1600.0*$.width,577.0/900.0*$.height);
+    bili_l.graphics.lineTo(711.0/1600.0*$.width,577.0/900.0*$.height);
+    bili_l.graphics.curveTo(690.0/1600.0*$.width,340.0/900.0*$.height,679.0/1600.0*$.width,327.0/900.0*$.height);
+    bili_l.graphics.endFill();
+/*second bili*/
+    var bili_2_b1 =$.createShape({lifeTime:time,parent:canvas});
+    bili_2_b1.transform.matrix3D = null;
+    bili_2_b1.graphics.beginFill(0x05b3fc);
+    bili_2_b1.graphics.moveTo(433.0/1600.0*$.width+372.0/1600.0*$.width,310.0/900.0*$.height);
+    bili_2_b1.graphics.lineTo(490.0/1600.0*$.width+372.0/1600.0*$.width,285.0/900.0*$.height);
+    bili_2_b1.graphics.curveTo(488.0/1600.0*$.width+372.0/1600.0*$.width,459.0/900.0*$.height,497.0/1600.0*$.width+372.0/1600.0*$.width,494.0/900.0*$.height);
+    bili_2_b1.graphics.curveTo(629.0/1600.0*$.width+372.0/1600.0*$.width,489.0/900.0*$.height,640.0/1600.0*$.width+372.0/1600.0*$.width,540.0/900.0*$.height);
+    bili_2_b1.graphics.curveTo(651.0/1600.0*$.width+372.0/1600.0*$.width,603.0/900.0*$.height,473.0/1600.0*$.width+372.0/1600.0*$.width,613.0/900.0*$.height);
+    bili_2_b1.graphics.curveTo(442.0/1600.0*$.width+372.0/1600.0*$.width,316.0/900.0*$.height,433.0/1600.0*$.width+372.0/1600.0*$.width,310.0/900.0*$.height);
+    bili_2_b1.graphics.endFill();
+
+    var bili_2_b2 =$.createShape({lifeTime:time,parent:canvas});
+    bili_2_b2.transform.matrix3D = null;
+    bili_2_b2.graphics.beginFill(0xffffff);
+    bili_2_b2.graphics.moveTo(525.0/1600.0*$.width+372.0/1600.0*$.width,525.0/900.0*$.height);
+    bili_2_b2.graphics.lineTo(583.0/1600.0*$.width+372.0/1600.0*$.width,545.0/900.0*$.height);
+    bili_2_b2.graphics.lineTo(533.0/1600.0*$.width+372.0/1600.0*$.width,583.0/900.0*$.height);
+    bili_2_b2.graphics.lineTo(525.0/1600.0*$.width+372.0/1600.0*$.width,525.0/900.0*$.height);
+    bili_2_b2.graphics.endFill();
+
+    var bili_2_i1 =$.createShape({lifeTime:time,parent:canvas});
+    bili_2_i1.transform.matrix3D = null;
+    bili_2_i1.graphics.beginFill(0x05b3fc);
+    bili_2_i1.graphics.moveTo(625.0/1600.0*$.width+372.0/1600.0*$.width,389.0/900.0*$.height);
+    bili_2_i1.graphics.lineTo(644.0/1600.0*$.width+372.0/1600.0*$.width,388.0/900.0*$.height);
+    bili_2_i1.graphics.lineTo(650.0/1600.0*$.width+372.0/1600.0*$.width,436.0/900.0*$.height);
+    bili_2_i1.graphics.lineTo(638.0/1600.0*$.width+372.0/1600.0*$.width,438.0/900.0*$.height);
+    bili_2_i1.graphics.lineTo(625.0/1600.0*$.width+372.0/1600.0*$.width,389.0/900.0*$.height);
+    bili_2_i1.graphics.moveTo(651.0/1600.0*$.width+372.0/1600.0*$.width,385.0/900.0*$.height);
+    bili_2_i1.graphics.lineTo(669.0/1600.0*$.width+372.0/1600.0*$.width,385.0/900.0*$.height);
+    bili_2_i1.graphics.lineTo(674.0/1600.0*$.width+372.0/1600.0*$.width,434.0/900.0*$.height);
+    bili_2_i1.graphics.lineTo(658.0/1600.0*$.width+372.0/1600.0*$.width,435.0/900.0*$.height);
+    bili_2_i1.graphics.lineTo(651.0/1600.0*$.width+372.0/1600.0*$.width,385.0/900.0*$.height);
+    bili_2_i1.graphics.moveTo(637.0/1600.0*$.width+372.0/1600.0*$.width,458.0/900.0*$.height);
+    bili_2_i1.graphics.curveTo(659.0/1600.0*$.width+372.0/1600.0*$.width,450.0/900.0*$.height,676.0/1600.0*$.width+372.0/1600.0*$.width,454.0/900.0*$.height);
+    bili_2_i1.graphics.curveTo(687.0/1600.0*$.width+372.0/1600.0*$.width,499.0/900.0*$.height,691.0/1600.0*$.width+372.0/1600.0*$.width,587.0/900.0*$.height);
+    bili_2_i1.graphics.lineTo(664.0/1600.0*$.width+372.0/1600.0*$.width,591.0/900.0*$.height);
+    bili_2_i1.graphics.lineTo(637.0/1600.0*$.width+372.0/1600.0*$.width,458.0/900.0*$.height);
+    bili_2_i1.graphics.endFill();
+
+    var bili_2_i2 =$.createShape({lifeTime:time,parent:canvas});
+    bili_2_i2.transform.matrix3D = null;
+    bili_2_i2.graphics.beginFill(0x05b3fc);
+    bili_2_i2.graphics.moveTo(746.0/1600.0*$.width+372.0/1600.0*$.width,391.0/900.0*$.height);
+    bili_2_i2.graphics.lineTo(763.0/1600.0*$.width+372.0/1600.0*$.width,391.0/900.0*$.height);
+    bili_2_i2.graphics.lineTo(763.0/1600.0*$.width+372.0/1600.0*$.width,441.0/900.0*$.height);
+    bili_2_i2.graphics.lineTo(750.0/1600.0*$.width+372.0/1600.0*$.width,441.0/900.0*$.height);
+    bili_2_i2.graphics.lineTo(746.0/1600.0*$.width+372.0/1600.0*$.width,391.0/900.0*$.height);
+    bili_2_i2.graphics.moveTo(771.0/1600.0*$.width+372.0/1600.0*$.width,390.0/900.0*$.height);
+    bili_2_i2.graphics.lineTo(789.0/1600.0*$.width+372.0/1600.0*$.width,391.0/900.0*$.height);
+    bili_2_i2.graphics.lineTo(788.0/1600.0*$.width+372.0/1600.0*$.width,440.0/900.0*$.height);
+    bili_2_i2.graphics.lineTo(772.0/1600.0*$.width+372.0/1600.0*$.width,440.0/900.0*$.height);
+    bili_2_i2.graphics.lineTo(771.0/1600.0*$.width+372.0/1600.0*$.width,390.0/900.0*$.height);
+    bili_2_i2.graphics.moveTo(751.0/1600.0*$.width+372.0/1600.0*$.width,460.0/900.0*$.height);
+    bili_2_i2.graphics.curveTo(783.0/1600.0*$.width+372.0/1600.0*$.width,455.0/900.0*$.height,789.0/1600.0*$.width+372.0/1600.0*$.width,460.0/900.0*$.height);
+    bili_2_i2.graphics.curveTo(793.0/1600.0*$.width+372.0/1600.0*$.width,470.0/900.0*$.height,791.0/1600.0*$.width+372.0/1600.0*$.width,594.0/900.0*$.height);
+    bili_2_i2.graphics.lineTo(763.0/1600.0*$.width+372.0/1600.0*$.width,594.0/900.0*$.height);
+    bili_2_i2.graphics.curveTo(750.0/1600.0*$.width+372.0/1600.0*$.width,475.0/900.0*$.height,751.0/1600.0*$.width+372.0/1600.0*$.width,460.0/900.0*$.height);
+    bili_2_i2.graphics.endFill();
+
+    var bili_2_l =$.createShape({lifeTime:time,parent:canvas});
+    bili_2_l.transform.matrix3D = null;
+    bili_2_l.graphics.beginFill(0x05b3fc);
+    bili_2_l.graphics.moveTo(679.0/1600.0*$.width+372.0/1600.0*$.width,327.0/900.0*$.height);
+    bili_2_l.graphics.curveTo(712.0/1600.0*$.width+372.0/1600.0*$.width,321.0/900.0*$.height,718.0/1600.0*$.width+372.0/1600.0*$.width,325.0/900.0*$.height);
+    bili_2_l.graphics.curveTo(737.0/1600.0*$.width+372.0/1600.0*$.width,569.0/900.0*$.height,739.0/1600.0*$.width+372.0/1600.0*$.width,577.0/900.0*$.height);
+    bili_2_l.graphics.lineTo(711.0/1600.0*$.width+372.0/1600.0*$.width,577.0/900.0*$.height);
+    bili_2_l.graphics.curveTo(690.0/1600.0*$.width+372.0/1600.0*$.width,340.0/900.0*$.height,679.0/1600.0*$.width+372.0/1600.0*$.width,327.0/900.0*$.height);
+    bili_2_l.graphics.endFill();
+
+}
+
+bilibili(5);

@@ -1,0 +1,11 @@
+/*
+*BGM control
+*/
+var _starttime;
+var _endtime;
+function bgmcontrol(){
+    interval(function(){
+                if(Player.time<_endtime+1000&&Player.time>_endtime-1000)
+                    Player.seek(_starttime);
+    },100,0);
+}
